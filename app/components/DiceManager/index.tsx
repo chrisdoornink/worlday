@@ -2,9 +2,17 @@
 
 // components/DiceManager.js
 import React, { useState } from "react";
-import { Box, Button, Container, Grid } from "@mui/material";
+import { Box, Button, Container, Grid, TextField, Dialog, DialogTitle, DialogContent, DialogActions, List, ListItem, ListItemText, IconButton } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
+import DeleteIcon from '@mui/icons-material/Delete';
+import SaveIcon from '@mui/icons-material/Save';
 import DiceItem, { Dice } from "./DiceItem";
+
+interface DicePreset {
+  id: string;
+  name: string;
+  dice: Dice[];
+}
 
 const DEFAULT_DICE = {
   name: "Dice",
@@ -15,13 +23,29 @@ const DEFAULT_DICE = {
 
 const DiceManager = () => {
   const [dice, setDice] = useState<Dice[]>(() => {
-    const savedDice = localStorage.getItem("dice");
+    const savedDice = localStorage.getItem("currentDice");
     return savedDice ? JSON.parse(savedDice) : [];
   });
 
+  const [presets, setPresets] = useState<DicePreset[]>(() => {
+    const savedPresets = localStorage.getItem("dicePresets");
+    return savedPresets ? JSON.parse(savedPresets) : [];
+  });
+
+  const [savePresetOpen, setSavePresetOpen] = useState(false);
+  const [loadPresetOpen, setLoadPresetOpen] = useState(false);
+  const [newPresetName, setNewPresetName] = useState("");
+
+  const [rolling, setRolling] = useState(false);
+  const [rollTime, setRollTime] = useState(3000);
+
   React.useEffect(() => {
-    localStorage.setItem("dice", JSON.stringify(dice));
+    localStorage.setItem("currentDice", JSON.stringify(dice));
   }, [dice]);
+
+  React.useEffect(() => {
+    localStorage.setItem("dicePresets", JSON.stringify(presets));
+  }, [presets]);
 
   const addDice = () => {
     setDice([...dice, { ...DEFAULT_DICE, id: uuidv4() }]);
@@ -38,8 +62,27 @@ const DiceManager = () => {
     setDice(newDiceList);
   };
 
-  const [rolling, setRolling] = useState(false);
-  const [rollTime, setRollTime] = useState(3000);
+  const savePreset = () => {
+    if (newPresetName.trim()) {
+      const newPreset: DicePreset = {
+        id: uuidv4(),
+        name: newPresetName.trim(),
+        dice: [...dice]
+      };
+      setPresets([...presets, newPreset]);
+      setSavePresetOpen(false);
+      setNewPresetName("");
+    }
+  };
+
+  const loadPreset = (preset: DicePreset) => {
+    setDice([...preset.dice]);
+    setLoadPresetOpen(false);
+  };
+
+  const deletePreset = (presetId: string) => {
+    setPresets(presets.filter(p => p.id !== presetId));
+  };
 
   const rollDice = () => {
     setRolling(true);
@@ -54,8 +97,71 @@ const DiceManager = () => {
   };
 
   return (
-    <>
-      <Button onClick={addDice}>Add Dice</Button>
+    <Container>
+      <Box sx={{ mb: 2, display: 'flex', gap: 2 }}>
+        <Button variant="contained" onClick={addDice}>Add Dice</Button>
+        <Button variant="contained" onClick={() => setSavePresetOpen(true)} startIcon={<SaveIcon />}>
+          Save Preset
+        </Button>
+        <Button variant="contained" onClick={() => setLoadPresetOpen(true)}>
+          Load Preset
+        </Button>
+        <Button variant="contained" color="primary" onClick={rollDice} disabled={rolling || dice.length === 0}>
+          Roll All
+        </Button>
+      </Box>
+
+      <Dialog open={savePresetOpen} onClose={() => setSavePresetOpen(false)}>
+        <DialogTitle>Save Preset</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Preset Name"
+            fullWidth
+            value={newPresetName}
+            onChange={(e) => setNewPresetName(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setSavePresetOpen(false)}>Cancel</Button>
+          <Button onClick={savePreset} disabled={!newPresetName.trim()}>Save</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={loadPresetOpen} onClose={() => setLoadPresetOpen(false)}>
+        <DialogTitle>Load Preset</DialogTitle>
+        <DialogContent>
+          <List>
+            {presets.map((preset) => (
+              <ListItem
+                key={preset.id}
+                secondaryAction={
+                  <IconButton edge="end" onClick={() => deletePreset(preset.id)}>
+                    <DeleteIcon />
+                  </IconButton>
+                }
+              >
+                <ListItemText 
+                  primary={preset.name}
+                  secondary={`${preset.dice.length} dice`}
+                  onClick={() => loadPreset(preset)}
+                  sx={{ cursor: 'pointer' }}
+                />
+              </ListItem>
+            ))}
+            {presets.length === 0 && (
+              <ListItem>
+                <ListItemText primary="No presets saved yet" />
+              </ListItem>
+            )}
+          </List>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setLoadPresetOpen(false)}>Close</Button>
+        </DialogActions>
+      </Dialog>
+
       <Grid container spacing={2}>
         {dice.map((die) => (
           <Grid item key={die.id} xs={12} sm={6} md={4} lg={3}>
@@ -63,10 +169,9 @@ const DiceManager = () => {
           </Grid>
         ))}
       </Grid>
-      <Button onClick={rollDice}>Roll Dice</Button>
       <Button onClick={() => setRollTime(rollTime + 1000)}>Increase Roll Time</Button>
       <Button onClick={() => setRollTime(rollTime - 1000)}>Decrease Roll Time</Button>
-    </>
+    </Container>
   );
 };
 
