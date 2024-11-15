@@ -86,10 +86,21 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
         "&:hover .action-buttons": {
           visibility: "visible",
         },
+        fontFamily: 'sans-serif'
       }}
     >
+      <Box sx={{ 
+        position: 'absolute',
+        top: 8,
+        left: 8,
+        color: 'text.disabled',
+        fontSize: '0.875rem',
+        fontFamily: 'sans-serif'
+      }}>
+        {die.name}
+      </Box>
       <Grid container alignItems="center">
-        <Grid item xs={12} sm={8}>
+        <Grid item xs={12} sm={8} sx={{ fontFamily: 'sans-serif' }}>
           {displayValue}
         </Grid>
         <Grid item xs={12} sm={4} container justifyContent="flex-end" spacing={1}>
