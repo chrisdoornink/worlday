@@ -169,8 +169,41 @@ const DiceManager = () => {
           </Grid>
         ))}
       </Grid>
-      <Button onClick={() => setRollTime(rollTime + 1000)}>Increase Roll Time</Button>
-      <Button onClick={() => setRollTime(rollTime - 1000)}>Decrease Roll Time</Button>
+
+      <Box sx={{ 
+        mt: 4, 
+        pt: 2, 
+        borderTop: 1, 
+        borderColor: 'divider',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 2
+      }}>
+        <Button 
+          variant="outlined" 
+          size="small" 
+          onClick={() => setRollTime(Math.max(1000, rollTime - 1000))}
+          disabled={rollTime <= 1000}
+        >
+          Faster Roll
+        </Button>
+        <Box sx={{ 
+          px: 2,
+          color: 'text.secondary',
+          fontSize: '0.875rem'
+        }}>
+          Roll Time: {rollTime / 1000}s
+        </Box>
+        <Button 
+          variant="outlined" 
+          size="small" 
+          onClick={() => setRollTime(Math.min(10000, rollTime + 1000))}
+          disabled={rollTime >= 10000}
+        >
+          Slower Roll
+        </Button>
+      </Box>
     </Container>
   );
 };

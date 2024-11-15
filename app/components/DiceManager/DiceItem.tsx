@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, FormControl, Grid, TextField } from "@mui/material";
+import { Box, Button, Dialog, FormControl, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
 interface DiceItemProps {
@@ -18,133 +18,133 @@ export interface Dice {
 
 const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling }) => {
   const [open, setOpen] = useState(false);
-
-  const editDie = () => {
-    setOpen(true);
-  };
-
-  const updateDie = (updatedDie: Dice) => {
-    onUpdate(updatedDie);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const updateDieValues = (index: number, value: string) => {
-    const updatedValues = [...die.values];
-    updatedValues[index] = value;
-    onUpdate({ ...die, values: updatedValues });
-  };
-
-  const handleSidesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // if we add sides, they must be named, give them the dice name and side index as default
-    // but preserve the existing sides
-    // we can get the number of NEW sides by comparing to the existing length of the values property
-    const oldSides = die.values.length;
-    const newSides = parseInt(e.target.value);
-
-    let newValues = die.values;
-    if (newSides > oldSides) {
-      const newLabels = Array(newSides - oldSides).fill(`Side-${oldSides + 1}`);
-      newValues = die.values.concat(newLabels);
-    } else {
-      newValues = die.values.slice(0, newSides);
-    }
-
-    onUpdate({ ...die, sides: newSides, values: newValues });
-  };
-
-  // const displayValue = die.values[die.currentValue] || die.currentValue + 1;
   const [displayValue, setDisplayValue] = useState(
     die.values[die.currentValue] || die.currentValue + 1
   );
+  const [rotationDeg, setRotationDeg] = useState(0);
+
   useEffect(() => {
-    // if rolling is true, we want to cycle through the values of the die in a quick loop
-    // that slows down as the roll time increases. Once rolling is false, we want to show
-    // the current value again.
     if (rolling) {
-      let index = 0;
+      // Simple rotation animation while rolling
       const interval = setInterval(() => {
-        setDisplayValue(die.values[index % die.values.length]);
-        index++;
+        setRotationDeg(prev => (prev + 45) % 360);
+        // Cycle through values while rolling
+        setDisplayValue(die.values[Math.floor(Math.random() * die.values.length)]);
       }, 100);
-      return () => clearInterval(interval);
-    } else {
-      setDisplayValue(die.values[die.currentValue] || die.currentValue + 1);
+
+      return () => {
+        clearInterval(interval);
+        // Reset rotation when rolling stops
+        setRotationDeg(0);
+        // Show final value
+        setDisplayValue(die.values[die.currentValue] || die.currentValue + 1);
+      };
     }
-  }, [rolling]);
+  }, [rolling, die.values, die.currentValue]);
+
+  const handleUpdate = (event: React.FormEvent) => {
+    event.preventDefault();
+    const formData = new FormData(event.target as HTMLFormElement);
+    const newSides = parseInt(formData.get("sides") as string) || die.sides;
+    const values = formData.get("values") as string;
+    const newValues = values ? values.split(",").map(v => v.trim()) : [];
+
+    while (newValues.length < newSides) {
+      newValues.push((newValues.length + 1).toString());
+    }
+
+    onUpdate({ ...die, sides: newSides, values: newValues });
+    setOpen(false);
+  };
 
   return (
     <Box
       sx={{
-        p: 4,
+        p: 2,
         backgroundColor: "background.paper",
-        minWidth: 200,
-        boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.1)",
+        borderRadius: 2,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 2,
         position: "relative",
-        "&:hover .action-buttons": {
-          visibility: "visible",
-        },
-        fontFamily: 'sans-serif'
       }}
     >
-      <Box sx={{ 
-        position: 'absolute',
-        top: 8,
-        left: 8,
-        color: 'text.disabled',
-        fontSize: '0.875rem',
-        fontFamily: 'sans-serif'
-      }}>
+      <Box
+        sx={{
+          fontSize: "0.75rem",
+          color: "text.secondary",
+          position: "absolute",
+          top: 8,
+          left: 8,
+        }}
+      >
         {die.name}
       </Box>
-      <Grid container alignItems="center">
-        <Grid item xs={12} sm={8} sx={{ fontFamily: 'sans-serif' }}>
-          {displayValue}
-        </Grid>
-        <Grid item xs={12} sm={4} container justifyContent="flex-end" spacing={1}>
-          <Grid item>
-            <Button sx={{ visibility: "hidden" }} className="action-buttons" onClick={editDie}>
-              Update
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              sx={{ visibility: "hidden" }}
-              className="action-buttons"
-              variant="contained"
-              color="error"
-              onClick={() => onDelete(die)}
-            >
-              Delete
-            </Button>
-          </Grid>
-        </Grid>
-      </Grid>
+      
+      <Box
+        sx={{
+          width: 80,
+          height: 80,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "2rem",
+          fontWeight: "bold",
+          border: "2px solid",
+          borderColor: "primary.main",
+          borderRadius: die.sides === 2 ? "50%" : 2,
+          transform: `rotate(${rotationDeg}deg)`,
+          transition: "transform 0.1s ease-in-out",
+        }}
+      >
+        {displayValue}
+      </Box>
 
-      <Dialog open={open} onClose={handleClose}>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, p: 4 }}>
+      <Box sx={{ display: "flex", gap: 1 }}>
+        <Button
+          variant="outlined"
+          size="small"
+          onClick={() => setOpen(true)}
+        >
+          Edit
+        </Button>
+        <Button
+          variant="outlined"
+          size="small"
+          color="error"
+          onClick={() => onDelete(die)}
+        >
+          Delete
+        </Button>
+      </Box>
+
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <Box
+          component="form"
+          onSubmit={handleUpdate}
+          sx={{ p: 2, display: "flex", flexDirection: "column", gap: 2 }}
+        >
           <FormControl>
             <TextField
-              label="Name"
-              value={die.name}
-              onChange={(e) => updateDie({ ...die, name: e.target.value })}
+              name="sides"
+              label="Number of Sides"
+              type="number"
+              defaultValue={die.sides}
+              inputProps={{ min: 1, max: 100 }}
             />
           </FormControl>
           <FormControl>
-            <TextField type="number" label="Sides" value={die.sides} onChange={handleSidesChange} />
+            <TextField
+              name="values"
+              label="Values (comma-separated)"
+              defaultValue={die.values.join(", ")}
+              helperText="Leave empty for default values"
+            />
           </FormControl>
-          {die.sides > 0 &&
-            die.values.map((value, index) => (
-              <FormControl key={index}>
-                <TextField
-                  label={`Label ${index + 1}`}
-                  value={value}
-                  onChange={(e) => updateDieValues(index, e.target.value)}
-                />
-              </FormControl>
-            ))}
+          <Button type="submit" variant="contained">
+            Save
+          </Button>
         </Box>
       </Dialog>
     </Box>
