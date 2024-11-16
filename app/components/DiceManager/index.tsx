@@ -147,6 +147,18 @@ const DiceManager = () => {
         >
           Add Die
         </Button>
+        <Button
+          variant="outlined"
+          onClick={() => setHistoryOpen(true)}
+          startIcon={<HistoryIcon />}
+          sx={{ 
+            minWidth: 100,
+            color: 'text.secondary',
+            borderColor: 'divider'
+          }}
+        >
+          History
+        </Button>
         <Button 
           variant="outlined" 
           onClick={() => setSavePresetOpen(true)}
@@ -168,18 +180,6 @@ const DiceManager = () => {
           }}
         >
           Load Preset
-        </Button>
-        <Button
-          variant="outlined"
-          onClick={() => setHistoryOpen(true)}
-          startIcon={<HistoryIcon />}
-          sx={{ 
-            minWidth: 100,
-            color: 'text.secondary',
-            borderColor: 'divider'
-          }}
-        >
-          History
         </Button>
       </Box>
 
@@ -222,50 +222,6 @@ const DiceManager = () => {
         mt: 'auto', 
         pt: 4 
       }}>
-        {/* Roll Speed Controls */}
-        <Box sx={{ 
-          display: 'flex',
-          alignItems: 'center',
-          gap: 2,
-          p: 2,
-          borderRadius: 1,
-          bgcolor: 'background.paper'
-        }}>
-          <Button 
-            variant="outlined" 
-            size="small" 
-            onClick={() => setRollTime(Math.max(1000, rollTime - 1000))}
-            disabled={rollTime <= 1000}
-            sx={{ 
-              minWidth: 100,
-              color: 'text.secondary',
-              borderColor: 'divider'
-            }}
-          >
-            Faster Roll
-          </Button>
-          <Box sx={{ 
-            px: 2,
-            color: 'text.secondary',
-            fontSize: '0.875rem'
-          }}>
-            Roll Time: {rollTime / 1000}s
-          </Box>
-          <Button 
-            variant="outlined" 
-            size="small" 
-            onClick={() => setRollTime(Math.min(10000, rollTime + 1000))}
-            disabled={rollTime >= 10000}
-            sx={{ 
-              minWidth: 100,
-              color: 'text.secondary',
-              borderColor: 'divider'
-            }}
-          >
-            Slower Roll
-          </Button>
-        </Box>
-
         {/* Roll Button */}
         <Button
           variant="contained"
@@ -280,6 +236,53 @@ const DiceManager = () => {
         >
           {rolling ? 'Rolling...' : 'Roll Dice'}
         </Button>
+
+        {/* Roll Speed Controls */}
+        <Box sx={{ 
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2,
+          p: 2,
+          borderRadius: 1,
+          bgcolor: 'background.paper',
+          opacity: 0.8
+        }}>
+          <Button 
+            variant="outlined" 
+            size="small" 
+            onClick={() => setRollTime(Math.max(1000, rollTime - 1000))}
+            disabled={rollTime <= 1000}
+            sx={{ 
+              minWidth: 80,
+              color: 'text.secondary',
+              borderColor: 'divider',
+              fontSize: '0.75rem'
+            }}
+          >
+            Faster
+          </Button>
+          <Box sx={{ 
+            px: 2,
+            color: 'text.secondary',
+            fontSize: '0.75rem'
+          }}>
+            Roll Time: {rollTime / 1000}s
+          </Box>
+          <Button 
+            variant="outlined" 
+            size="small" 
+            onClick={() => setRollTime(Math.min(10000, rollTime + 1000))}
+            disabled={rollTime >= 10000}
+            sx={{ 
+              minWidth: 80,
+              color: 'text.secondary',
+              borderColor: 'divider',
+              fontSize: '0.75rem'
+            }}
+          >
+            Slower
+          </Button>
+        </Box>
       </Box>
 
       {/* Dialogs */}
