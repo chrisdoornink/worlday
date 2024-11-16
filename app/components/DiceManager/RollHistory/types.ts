@@ -4,3 +4,8 @@ export interface RollHistoryItem {
   value: string | number;
   timestamp: number;
 }
+
+export interface RollGroup {
+  timestamp: number;
+  rolls: RollHistoryItem[];
+}

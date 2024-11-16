@@ -123,6 +123,10 @@ const DiceManager = () => {
     ]);
   }, [dice]);
 
+  const clearHistory = () => {
+    setRollHistory([]);
+  };
+
   return (
     <Container>
       <Box sx={{ mb: 2, display: 'flex', gap: 2 }}>
@@ -242,6 +246,7 @@ const DiceManager = () => {
       <RollHistoryDrawer
         open={historyOpen}
         onClose={() => setHistoryOpen(false)}
+        onClear={clearHistory}
         history={rollHistory}
       />
     </Container>

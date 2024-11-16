@@ -1,4 +1,4 @@
-import { Drawer, Box, Typography, IconButton } from "@mui/material";
+import { Drawer, Box, Typography, IconButton, Link } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import RollHistoryList from "./RollHistoryList";
 import { RollHistoryItem } from "./types";
@@ -6,10 +6,11 @@ import { RollHistoryItem } from "./types";
 interface RollHistoryDrawerProps {
   open: boolean;
   onClose: () => void;
+  onClear: () => void;
   history: RollHistoryItem[];
 }
 
-export default function RollHistoryDrawer({ open, onClose, history }: RollHistoryDrawerProps) {
+export default function RollHistoryDrawer({ open, onClose, onClear, history }: RollHistoryDrawerProps) {
   return (
     <Drawer
       anchor="right"
@@ -23,7 +24,23 @@ export default function RollHistoryDrawer({ open, onClose, history }: RollHistor
       }}
     >
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-        <Typography variant="h6">Roll History</Typography>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+          <Typography variant="h6">Roll History</Typography>
+          <Link
+            component="button"
+            variant="caption"
+            onClick={onClear}
+            sx={{
+              color: "text.secondary",
+              textDecoration: "none",
+              "&:hover": {
+                textDecoration: "underline",
+              },
+            }}
+          >
+            clear
+          </Link>
+        </Box>
         <IconButton onClick={onClose} size="small">
           <CloseIcon />
         </IconButton>

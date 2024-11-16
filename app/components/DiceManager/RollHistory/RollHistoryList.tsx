@@ -1,5 +1,5 @@
 import { Box, List, ListItem, ListItemText, Typography, Divider } from "@mui/material";
-import { RollHistoryItem } from "./types";
+import { RollHistoryItem, RollGroup } from "./types";
 
 interface RollHistoryListProps {
   history: RollHistoryItem[];
@@ -14,28 +14,55 @@ export default function RollHistoryList({ history }: RollHistoryListProps) {
     );
   }
 
+  // Group rolls by timestamp
+  const groupedRolls: RollGroup[] = history.reduce((groups: RollGroup[], item) => {
+    const existingGroup = groups.find(g => g.timestamp === item.timestamp);
+    if (existingGroup) {
+      existingGroup.rolls.push(item);
+    } else {
+      groups.push({ timestamp: item.timestamp, rolls: [item] });
+    }
+    return groups;
+  }, []);
+
   return (
-    <List sx={{ width: "100%" }}>
-      {history.map((item, index) => (
-        <Box key={item.id}>
-          <ListItem>
-            <ListItemText
-              primary={
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                  <Typography variant="body1">{item.dieName}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {new Date(item.timestamp).toLocaleTimeString()}
-                  </Typography>
-                </Box>
-              }
-              secondary={
-                <Typography variant="h6" sx={{ mt: 0.5 }}>
-                  {item.value}
-                </Typography>
-              }
-            />
-          </ListItem>
-          {index < history.length - 1 && <Divider />}
+    <List sx={{ width: "100%", py: 0 }}>
+      {groupedRolls.map((group, groupIndex) => (
+        <Box key={group.timestamp} sx={{ mb: groupIndex < groupedRolls.length - 1 ? 2 : 0 }}>
+          <Typography
+            variant="caption"
+            sx={{
+              color: "text.secondary",
+              display: "block",
+              px: 2,
+              py: 0.5,
+              borderBottom: "1px solid",
+              borderColor: "divider",
+              bgcolor: "background.paper",
+            }}
+          >
+            {new Date(group.timestamp).toLocaleTimeString()}
+          </Typography>
+          {group.rolls.map((item, index) => (
+            <ListItem
+              key={item.id}
+              sx={{
+                py: 0.25,
+                px: 1.5,
+              }}
+            >
+              <ListItemText
+                primary={
+                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <Typography variant="body2">{item.dieName}</Typography>
+                    <Typography variant="body1" sx={{ fontWeight: "medium" }}>
+                      {item.value}
+                    </Typography>
+                  </Box>
+                }
+              />
+            </ListItem>
+          ))}
         </Box>
       ))}
     </List>
