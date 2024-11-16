@@ -138,7 +138,6 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
               color: "#444444",
               textShadow: "0px 1px 0px rgba(255,255,255,.5), 0px -1px 0px rgba(0,0,0,.3)",
               boxShadow: "inset 0 0 10px rgba(0,0,0,0.1)",
-              border: "1px solid rgba(255,255,255,0.8)",
               borderRadius: "4px",
               transform: "translateZ(40px)",
               backfaceVisibility: "hidden"
