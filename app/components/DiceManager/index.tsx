@@ -37,7 +37,7 @@ const DiceManager = () => {
   const [newPresetName, setNewPresetName] = useState("");
 
   const [rolling, setRolling] = useState(false);
-  const [rollTime, setRollTime] = useState(3000);
+  const [rollTime, setRollTime] = useState(2000);
 
   React.useEffect(() => {
     localStorage.setItem("currentDice", JSON.stringify(dice));
