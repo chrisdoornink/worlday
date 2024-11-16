@@ -45,15 +45,19 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
   const handleUpdate = (event: React.FormEvent) => {
     event.preventDefault();
     const formData = new FormData(event.target as HTMLFormElement);
-    const newSides = parseInt(formData.get("sides") as string) || die.sides;
     const values = formData.get("values") as string;
     const newValues = values ? values.split(",").map(v => v.trim()) : [];
 
-    while (newValues.length < newSides) {
-      newValues.push((newValues.length + 1).toString());
+    // Ensure we have at least one value
+    if (newValues.length === 0) {
+      newValues.push("1");
     }
 
-    onUpdate({ ...die, sides: newSides, values: newValues });
+    onUpdate({ 
+      ...die, 
+      sides: newValues.length,
+      values: newValues 
+    });
     setOpen(false);
   };
 
@@ -89,13 +93,26 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontSize: "2rem",
+          fontSize: (theme) => {
+            const length = displayValue.length;
+            if (length <= 2) return "2rem";
+            if (length <= 4) return "1.5rem";
+            if (length <= 6) return "1.25rem";
+            if (length <= 8) return "1rem";
+            if (length <= 10) return "0.875rem";
+            return "0.75rem";
+          },
+          padding: 1,
           fontWeight: "bold",
           border: "2px solid",
           borderColor: "primary.main",
           borderRadius: die.sides === 2 ? "50%" : 2,
           transform: `rotate(${rotationDeg}deg)`,
           transition: "transform 0.1s ease-in-out",
+          wordBreak: "break-word",
+          textAlign: "center",
+          lineHeight: 1.2,
+          overflow: "hidden"
         }}
       >
         {displayValue}
@@ -127,19 +144,13 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
         >
           <FormControl>
             <TextField
-              name="sides"
-              label="Number of Sides"
-              type="number"
-              defaultValue={die.sides}
-              inputProps={{ min: 1, max: 100 }}
-            />
-          </FormControl>
-          <FormControl>
-            <TextField
               name="values"
               label="Values (comma-separated)"
               defaultValue={die.values.join(", ")}
-              helperText="Leave empty for default values"
+              helperText="Enter values separated by commas (e.g., '1, 2, 3' or 'Yes, No, Maybe')"
+              multiline
+              rows={2}
+              fullWidth
             />
           </FormControl>
           <Button type="submit" variant="contained">
