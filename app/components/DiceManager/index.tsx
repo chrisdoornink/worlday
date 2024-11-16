@@ -1,10 +1,8 @@
 "use client";
 
-import React, { use, useEffect, useState } from "react";
-import { Box, Button, Container, Grid, TextField, Dialog, DialogTitle, DialogContent, DialogActions, List, ListItem, ListItemText, IconButton, Divider } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Button, Container, Grid, TextField, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
-import DeleteIcon from '@mui/icons-material/Delete';
-import SaveIcon from '@mui/icons-material/Save';
 import HistoryIcon from '@mui/icons-material/History';
 import DiceItem from "./DiceItem";
 import { RollHistoryDrawer } from "./RollHistory";
@@ -25,25 +23,24 @@ const DiceManager = () => {
   const [savePresetOpen, setSavePresetOpen] = useState(false);
   const [loadPresetOpen, setLoadPresetOpen] = useState(false);
   const [newPresetName, setNewPresetName] = useState("");
-
+  const [historyOpen, setHistoryOpen] = useState(false);
   const [rolling, setRolling] = useState(false);
   const [rollTime, setRollTime] = useState(2000);
 
-  const [historyOpen, setHistoryOpen] = useState(false);
   const [rollHistory, setRollHistory] = useState<RollHistoryItem[]>(() => {
     const savedHistory = localStorage.getItem("rollHistory");
     return savedHistory ? JSON.parse(savedHistory) : [];
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     localStorage.setItem("currentDice", JSON.stringify(dice));
   }, [dice]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     localStorage.setItem("dicePresets", JSON.stringify(presets));
   }, [presets]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     localStorage.setItem("rollHistory", JSON.stringify(rollHistory));
   }, [rollHistory]);
 
@@ -85,6 +82,8 @@ const DiceManager = () => {
   };
 
   const rollDice = () => {
+    if (dice.length === 0) return;
+    
     setRolling(true);
     
     setTimeout(() => {
@@ -93,49 +92,197 @@ const DiceManager = () => {
         return { ...die, currentValue: randomIndex };
       });
 
-      setRolling(false);
       setDice(updatedDice);
+      setRolling(false);
     }, rollTime);
   };
 
   useEffect(() => {
-    setRollHistory((prevHistory) => [
-      ...dice.map((die) => ({
-        id: uuidv4(),
-        dieName: die.name,
-        value: die.values[die.currentValue],
-        timestamp: Date.now(),
-      })),
-      ...prevHistory,
-    ]);
-  }, [dice]);
+    if (!rolling) {
+      setRollHistory((prevHistory) => [
+        ...dice.map((die) => ({
+          id: uuidv4(),
+          dieName: die.name,
+          value: die.values[die.currentValue],
+          timestamp: Date.now(),
+        })),
+        ...prevHistory,
+      ]);
+    }
+  }, [dice, rolling]);
 
   const clearHistory = () => {
     setRollHistory([]);
   };
 
   return (
-    <Container>
-      <Box sx={{ mb: 2, display: 'flex', gap: 2 }}>
-        <Button variant="contained" onClick={addDice}>Add Dice</Button>
-        <Button variant="outlined" onClick={() => setSavePresetOpen(true)}>
+    <Container 
+      maxWidth={false} 
+      sx={{ 
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        px: { xs: 2, sm: 4 },
+        py: { xs: 2, sm: 4 }
+      }}
+    >
+      {/* Top Controls */}
+      <Box 
+        sx={{ 
+          display: 'flex', 
+          gap: 2,
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          mb: 4
+        }}
+      >
+        <Button 
+          variant="outlined" 
+          onClick={addDice}
+          sx={{ 
+            minWidth: 100,
+            color: 'text.secondary',
+            borderColor: 'divider'
+          }}
+        >
+          Add Die
+        </Button>
+        <Button 
+          variant="outlined" 
+          onClick={() => setSavePresetOpen(true)}
+          sx={{ 
+            minWidth: 100,
+            color: 'text.secondary',
+            borderColor: 'divider'
+          }}
+        >
           Save Preset
         </Button>
-        <Button variant="outlined" onClick={() => setLoadPresetOpen(true)}>
+        <Button 
+          variant="outlined" 
+          onClick={() => setLoadPresetOpen(true)}
+          sx={{ 
+            minWidth: 100,
+            color: 'text.secondary',
+            borderColor: 'divider'
+          }}
+        >
           Load Preset
-        </Button>
-        <Button variant="contained" color="primary" onClick={rollDice} disabled={rolling || dice.length === 0}>
-          Roll All
         </Button>
         <Button
           variant="outlined"
           onClick={() => setHistoryOpen(true)}
           startIcon={<HistoryIcon />}
+          sx={{ 
+            minWidth: 100,
+            color: 'text.secondary',
+            borderColor: 'divider'
+          }}
         >
           History
         </Button>
       </Box>
 
+      {/* Centered Dice Area */}
+      <Box 
+        sx={{ 
+          flex: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          my: 4
+        }}
+      >
+        <Grid 
+          container 
+          spacing={3}
+          justifyContent="center"
+          alignItems="center"
+          sx={{ maxWidth: 'lg' }}
+        >
+          {dice.map((die) => (
+            <Grid item key={die.id}>
+              <DiceItem
+                die={die}
+                onUpdate={updateDice}
+                onDelete={deleteDice}
+                rolling={rolling}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+
+      {/* Bottom Controls */}
+      <Box sx={{ 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center',
+        gap: 3,
+        mt: 'auto', 
+        pt: 4 
+      }}>
+        {/* Roll Speed Controls */}
+        <Box sx={{ 
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2,
+          p: 2,
+          borderRadius: 1,
+          bgcolor: 'background.paper'
+        }}>
+          <Button 
+            variant="outlined" 
+            size="small" 
+            onClick={() => setRollTime(Math.max(1000, rollTime - 1000))}
+            disabled={rollTime <= 1000}
+            sx={{ 
+              minWidth: 100,
+              color: 'text.secondary',
+              borderColor: 'divider'
+            }}
+          >
+            Faster Roll
+          </Button>
+          <Box sx={{ 
+            px: 2,
+            color: 'text.secondary',
+            fontSize: '0.875rem'
+          }}>
+            Roll Time: {rollTime / 1000}s
+          </Box>
+          <Button 
+            variant="outlined" 
+            size="small" 
+            onClick={() => setRollTime(Math.min(10000, rollTime + 1000))}
+            disabled={rollTime >= 10000}
+            sx={{ 
+              minWidth: 100,
+              color: 'text.secondary',
+              borderColor: 'divider'
+            }}
+          >
+            Slower Roll
+          </Button>
+        </Box>
+
+        {/* Roll Button */}
+        <Button
+          variant="contained"
+          onClick={rollDice}
+          disabled={dice.length === 0 || rolling}
+          sx={{
+            minWidth: 200,
+            py: 1.5,
+            px: 4,
+            fontSize: '1.1rem'
+          }}
+        >
+          {rolling ? 'Rolling...' : 'Roll Dice'}
+        </Button>
+      </Box>
+
+      {/* Dialogs */}
       <Dialog open={savePresetOpen} onClose={() => setSavePresetOpen(false)}>
         <DialogTitle>Save Preset</DialogTitle>
         <DialogContent>
@@ -150,104 +297,47 @@ const DiceManager = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setSavePresetOpen(false)}>Cancel</Button>
-          <Button onClick={savePreset} disabled={!newPresetName.trim()}>Save</Button>
+          <Button onClick={savePreset} variant="contained">Save</Button>
         </DialogActions>
       </Dialog>
 
       <Dialog open={loadPresetOpen} onClose={() => setLoadPresetOpen(false)}>
         <DialogTitle>Load Preset</DialogTitle>
         <DialogContent>
-          <List>
-            {/* User presets first */}
-            {presets.map((preset) => (
-              <ListItem
-                key={preset.id}
-                secondaryAction={
-                  <IconButton edge="end" aria-label="delete" onClick={() => deletePreset(preset.id)}>
-                    <DeleteIcon />
-                  </IconButton>
+          {[...DEFAULT_PRESETS, ...presets].map((preset) => (
+            <Box
+              key={preset.id}
+              sx={{
+                p: 2,
+                display: 'flex',
+                alignItems: 'center',
+                borderBottom: 1,
+                borderColor: 'divider',
+                '&:last-child': {
+                  borderBottom: 0
                 }
-              >
-                <ListItemText
-                  primary={
-                    <Button onClick={() => loadPreset(preset)}>
-                      {preset.name}
-                    </Button>
-                  }
-                />
-              </ListItem>
-            ))}
-            
-            {/* Divider if there are both user presets and we're showing defaults */}
-            {presets.length > 0 && <Divider sx={{ my: 1 }}>Default Presets</Divider>}
-            
-            {/* Default presets */}
-            {DEFAULT_PRESETS.map((preset) => (
-              <ListItem key={preset.id}>
-                <ListItemText
-                  primary={
-                    <Button onClick={() => loadPreset(preset)}>
-                      {preset.name}
-                    </Button>
-                  }
-                />
-              </ListItem>
-            ))}
-          </List>
+              }}
+            >
+              <Box sx={{ flex: 1 }}>{preset.name}</Box>
+              <Button onClick={() => loadPreset(preset)}>Load</Button>
+              {!DEFAULT_PRESETS.includes(preset) && (
+                <Button onClick={() => deletePreset(preset.id)} color="error">
+                  Delete
+                </Button>
+              )}
+            </Box>
+          ))}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setLoadPresetOpen(false)}>Cancel</Button>
         </DialogActions>
       </Dialog>
 
-      <Grid container spacing={2}>
-        {dice.map((die) => (
-          <Grid item key={die.id} xs={12} sm={6} md={4} lg={3}>
-            <DiceItem die={die} onUpdate={updateDice} onDelete={deleteDice} rolling={rolling} />
-          </Grid>
-        ))}
-      </Grid>
-
-      <Box sx={{ 
-        mt: 4, 
-        pt: 2, 
-        borderTop: 1, 
-        borderColor: 'divider',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 2
-      }}>
-        <Button 
-          variant="outlined" 
-          size="small" 
-          onClick={() => setRollTime(Math.max(1000, rollTime - 1000))}
-          disabled={rollTime <= 1000}
-        >
-          Faster Roll
-        </Button>
-        <Box sx={{ 
-          px: 2,
-          color: 'text.secondary',
-          fontSize: '0.875rem'
-        }}>
-          Roll Time: {rollTime / 1000}s
-        </Box>
-        <Button 
-          variant="outlined" 
-          size="small" 
-          onClick={() => setRollTime(Math.min(10000, rollTime + 1000))}
-          disabled={rollTime >= 10000}
-        >
-          Slower Roll
-        </Button>
-      </Box>
-
       <RollHistoryDrawer
         open={historyOpen}
         onClose={() => setHistoryOpen(false)}
-        onClear={clearHistory}
         history={rollHistory}
+        onClear={clearHistory}
       />
     </Container>
   );
