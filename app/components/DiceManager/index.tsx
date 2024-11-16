@@ -1,12 +1,15 @@
 "use client";
 
 // components/DiceManager.js
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { Box, Button, Container, Grid, TextField, Dialog, DialogTitle, DialogContent, DialogActions, List, ListItem, ListItemText, IconButton } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
+import HistoryIcon from '@mui/icons-material/History';
 import DiceItem, { Dice } from "./DiceItem";
+import { RollHistoryDrawer } from "./RollHistory";
+import type { RollHistoryItem } from "./RollHistory";
 
 interface DicePreset {
   id: string;
@@ -39,6 +42,12 @@ const DiceManager = () => {
   const [rolling, setRolling] = useState(false);
   const [rollTime, setRollTime] = useState(2000);
 
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [rollHistory, setRollHistory] = useState<RollHistoryItem[]>(() => {
+    const savedHistory = localStorage.getItem("rollHistory");
+    return savedHistory ? JSON.parse(savedHistory) : [];
+  });
+
   React.useEffect(() => {
     localStorage.setItem("currentDice", JSON.stringify(dice));
   }, [dice]);
@@ -46,6 +55,10 @@ const DiceManager = () => {
   React.useEffect(() => {
     localStorage.setItem("dicePresets", JSON.stringify(presets));
   }, [presets]);
+
+  React.useEffect(() => {
+    localStorage.setItem("rollHistory", JSON.stringify(rollHistory));
+  }, [rollHistory]);
 
   const addDice = () => {
     setDice([...dice, { ...DEFAULT_DICE, id: uuidv4() }]);
@@ -86,28 +99,49 @@ const DiceManager = () => {
 
   const rollDice = () => {
     setRolling(true);
-    const updatedDice = dice.map((die) => {
-      const randomIndex = Math.floor(Math.random() * die.values.length);
-      return { ...die, currentValue: randomIndex };
-    });
+    
     setTimeout(() => {
+      const updatedDice = dice.map((die) => {
+        const randomIndex = Math.floor(Math.random() * die.values.length);
+        return { ...die, currentValue: randomIndex };
+      });
+
       setRolling(false);
       setDice(updatedDice);
     }, rollTime);
   };
 
+  useEffect(() => {
+    setRollHistory((prevHistory) => [
+      ...dice.map((die) => ({
+        id: uuidv4(),
+        dieName: die.name,
+        value: die.values[die.currentValue],
+        timestamp: Date.now(),
+      })),
+      ...prevHistory,
+    ]);
+  }, [dice]);
+
   return (
     <Container>
       <Box sx={{ mb: 2, display: 'flex', gap: 2 }}>
         <Button variant="contained" onClick={addDice}>Add Dice</Button>
-        <Button variant="contained" onClick={() => setSavePresetOpen(true)} startIcon={<SaveIcon />}>
+        <Button variant="outlined" onClick={() => setSavePresetOpen(true)}>
           Save Preset
         </Button>
-        <Button variant="contained" onClick={() => setLoadPresetOpen(true)}>
+        <Button variant="outlined" onClick={() => setLoadPresetOpen(true)}>
           Load Preset
         </Button>
         <Button variant="contained" color="primary" onClick={rollDice} disabled={rolling || dice.length === 0}>
           Roll All
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={() => setHistoryOpen(true)}
+          startIcon={<HistoryIcon />}
+        >
+          History
         </Button>
       </Box>
 
@@ -204,6 +238,12 @@ const DiceManager = () => {
           Slower Roll
         </Button>
       </Box>
+
+      <RollHistoryDrawer
+        open={historyOpen}
+        onClose={() => setHistoryOpen(false)}
+        history={rollHistory}
+      />
     </Container>
   );
 };

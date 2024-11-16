@@ -36,9 +36,10 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
         clearInterval(interval);
         // Reset rotation when rolling stops
         setRotationDeg(0);
-        // Show final value
-        setDisplayValue(die.values[die.currentValue] || die.currentValue + 1);
       };
+    } else {
+      // Update display value when not rolling
+      setDisplayValue(die.values[die.currentValue] || die.currentValue + 1);
     }
   }, [rolling, die.values, die.currentValue]);
 
