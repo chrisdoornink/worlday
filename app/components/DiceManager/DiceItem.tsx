@@ -76,14 +76,29 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
     >
       <Box
         sx={{
-          fontSize: "0.75rem",
-          color: "text.secondary",
-          position: "absolute",
-          top: 8,
-          left: 8,
+          mb: 1,
+          textAlign: "center",
+          color: "#666666",
+          fontSize: "0.875rem",
         }}
       >
         {die.name}
+        <Box
+          component="span"
+          onClick={() => setOpen(true)}
+          sx={{
+            ml: 1,
+            cursor: "pointer",
+            fontSize: "0.75rem",
+            color: "#999999",
+            "&:hover": {
+              color: "#666666",
+              textDecoration: "underline"
+            }
+          }}
+        >
+          edit
+        </Box>
       </Box>
       
       <Box
@@ -129,7 +144,8 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
               color: "#444444",
               textShadow: "0px 1px 0px rgba(255,255,255,.5), 0px -1px 0px rgba(0,0,0,.3)",
               boxShadow: "inset 0 0 10px rgba(0,0,0,0.1)",
-              border: "2px solid rgba(255,255,255,0.8)",
+              border: "1px solid rgba(255,255,255,0.8)",
+              borderRadius: "4px",
               transform: "translateZ(40px)",
               backfaceVisibility: "hidden"
             }}
@@ -152,7 +168,8 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
               color: "#444444",
               textShadow: "0px 1px 0px rgba(255,255,255,.5), 0px -1px 0px rgba(0,0,0,.3)",
               boxShadow: "inset 0 0 10px rgba(0,0,0,0.1)",
-              border: "2px solid rgba(255,255,255,0.8)",
+              border: "1px solid rgba(255,255,255,0.8)",
+              borderRadius: "4px",
               transform: "translateZ(-40px) rotateY(180deg)",
               backfaceVisibility: "hidden"
             }}
@@ -175,7 +192,8 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
               color: "#444444",
               textShadow: "0px 1px 0px rgba(255,255,255,.5), 0px -1px 0px rgba(0,0,0,.3)",
               boxShadow: "inset 0 0 10px rgba(0,0,0,0.1)",
-              border: "2px solid rgba(255,255,255,0.8)",
+              border: "1px solid rgba(255,255,255,0.8)",
+              borderRadius: "4px",
               transform: "rotateY(90deg) translateZ(40px)",
               backfaceVisibility: "hidden"
             }}
@@ -198,7 +216,8 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
               color: "#444444",
               textShadow: "0px 1px 0px rgba(255,255,255,.5), 0px -1px 0px rgba(0,0,0,.3)",
               boxShadow: "inset 0 0 10px rgba(0,0,0,0.1)",
-              border: "2px solid rgba(255,255,255,0.8)",
+              border: "1px solid rgba(255,255,255,0.8)",
+              borderRadius: "4px",
               transform: "rotateY(-90deg) translateZ(40px)",
               backfaceVisibility: "hidden"
             }}
@@ -221,7 +240,8 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
               color: "#444444",
               textShadow: "0px 1px 0px rgba(255,255,255,.5), 0px -1px 0px rgba(0,0,0,.3)",
               boxShadow: "inset 0 0 10px rgba(0,0,0,0.1)",
-              border: "2px solid rgba(255,255,255,0.8)",
+              border: "1px solid rgba(255,255,255,0.8)",
+              borderRadius: "4px",
               transform: "rotateX(90deg) translateZ(40px)",
               backfaceVisibility: "hidden"
             }}
@@ -244,7 +264,8 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
               color: "#444444",
               textShadow: "0px 1px 0px rgba(255,255,255,.5), 0px -1px 0px rgba(0,0,0,.3)",
               boxShadow: "inset 0 0 10px rgba(0,0,0,0.1)",
-              border: "2px solid rgba(255,255,255,0.8)",
+              border: "1px solid rgba(255,255,255,0.8)",
+              borderRadius: "4px",
               transform: "rotateX(-90deg) translateZ(40px)",
               backfaceVisibility: "hidden"
             }}
@@ -254,31 +275,25 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
         </Box>
       </Box>
 
-      <Box sx={{ display: "flex", gap: 1 }}>
-        <Button
-          variant="outlined"
-          size="small"
-          onClick={() => setOpen(true)}
-        >
-          Edit
-        </Button>
-        <Button
-          variant="outlined"
-          size="small"
-          color="error"
-          onClick={() => onDelete(die)}
-        >
-          Delete
-        </Button>
-      </Box>
-
       <Dialog open={open} onClose={() => setOpen(false)}>
         <Box
           component="form"
           onSubmit={handleUpdate}
-          sx={{ p: 2, display: "flex", flexDirection: "column", gap: 2 }}
+          sx={{
+            p: 2,
+            minWidth: 300
+          }}
         >
-          <FormControl>
+          <FormControl fullWidth>
+            <TextField
+              label="Name"
+              value={die.name}
+              onChange={(e) => onUpdate({ ...die, name: e.target.value })}
+              size="small"
+              sx={{ mb: 2 }}
+            />
+          </FormControl>
+          <FormControl fullWidth>
             <TextField
               name="values"
               label="Values (comma-separated)"
@@ -286,12 +301,27 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
               helperText="Enter values separated by commas (e.g., '1, 2, 3' or 'Yes, No, Maybe')"
               multiline
               rows={2}
-              fullWidth
             />
           </FormControl>
-          <Button type="submit" variant="contained">
-            Save
-          </Button>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Box>
+              <Button
+                variant="outlined"
+                color="error"
+                size="small"
+                onClick={() => {
+                  onDelete(die);
+                  setOpen(false);
+                }}
+              >
+                Delete
+              </Button>
+            </Box>
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <Button onClick={() => setOpen(false)}>Cancel</Button>
+              <Button type="submit" variant="contained">Save</Button>
+            </Box>
+          </Box>
         </Box>
       </Dialog>
     </Box>
