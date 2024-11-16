@@ -1,19 +1,12 @@
 import { Box, Button, Dialog, FormControl, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import type { Dice } from "./constants";
 
 interface DiceItemProps {
   die: Dice;
   onUpdate: (die: Dice) => void;
   onDelete: (die: Dice) => void;
   rolling: boolean;
-}
-
-export interface Dice {
-  id: string;
-  name: string;
-  sides: number;
-  values: string[];
-  currentValue: number;
 }
 
 const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling }) => {

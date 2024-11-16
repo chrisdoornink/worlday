@@ -1,28 +1,15 @@
 "use client";
 
-// components/DiceManager.js
 import React, { use, useEffect, useState } from "react";
-import { Box, Button, Container, Grid, TextField, Dialog, DialogTitle, DialogContent, DialogActions, List, ListItem, ListItemText, IconButton } from "@mui/material";
+import { Box, Button, Container, Grid, TextField, Dialog, DialogTitle, DialogContent, DialogActions, List, ListItem, ListItemText, IconButton, Divider } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import HistoryIcon from '@mui/icons-material/History';
-import DiceItem, { Dice } from "./DiceItem";
+import DiceItem from "./DiceItem";
 import { RollHistoryDrawer } from "./RollHistory";
 import type { RollHistoryItem } from "./RollHistory";
-
-interface DicePreset {
-  id: string;
-  name: string;
-  dice: Dice[];
-}
-
-const DEFAULT_DICE = {
-  name: "Dice",
-  sides: 6,
-  values: ["1", "2", "3", "4", "5", "6"],
-  currentValue: 1,
-};
+import { DEFAULT_DICE, DEFAULT_PRESETS, type Dice, type DicePreset } from "./constants";
 
 const DiceManager = () => {
   const [dice, setDice] = useState<Dice[]>(() => {
@@ -89,7 +76,7 @@ const DiceManager = () => {
   };
 
   const loadPreset = (preset: DicePreset) => {
-    setDice([...preset.dice]);
+    setDice(preset.dice.map(die => ({ ...die, id: uuidv4() })));
     setLoadPresetOpen(false);
   };
 
@@ -171,32 +158,45 @@ const DiceManager = () => {
         <DialogTitle>Load Preset</DialogTitle>
         <DialogContent>
           <List>
+            {/* User presets first */}
             {presets.map((preset) => (
               <ListItem
                 key={preset.id}
                 secondaryAction={
-                  <IconButton edge="end" onClick={() => deletePreset(preset.id)}>
+                  <IconButton edge="end" aria-label="delete" onClick={() => deletePreset(preset.id)}>
                     <DeleteIcon />
                   </IconButton>
                 }
               >
-                <ListItemText 
-                  primary={preset.name}
-                  secondary={`${preset.dice.length} dice`}
-                  onClick={() => loadPreset(preset)}
-                  sx={{ cursor: 'pointer' }}
+                <ListItemText
+                  primary={
+                    <Button onClick={() => loadPreset(preset)}>
+                      {preset.name}
+                    </Button>
+                  }
                 />
               </ListItem>
             ))}
-            {presets.length === 0 && (
-              <ListItem>
-                <ListItemText primary="No presets saved yet" />
+            
+            {/* Divider if there are both user presets and we're showing defaults */}
+            {presets.length > 0 && <Divider sx={{ my: 1 }}>Default Presets</Divider>}
+            
+            {/* Default presets */}
+            {DEFAULT_PRESETS.map((preset) => (
+              <ListItem key={preset.id}>
+                <ListItemText
+                  primary={
+                    <Button onClick={() => loadPreset(preset)}>
+                      {preset.name}
+                    </Button>
+                  }
+                />
               </ListItem>
-            )}
+            ))}
           </List>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setLoadPresetOpen(false)}>Close</Button>
+          <Button onClick={() => setLoadPresetOpen(false)}>Cancel</Button>
         </DialogActions>
       </Dialog>
 
