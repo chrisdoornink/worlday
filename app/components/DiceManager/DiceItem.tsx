@@ -94,7 +94,7 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
           alignItems: "center",
           justifyContent: "center",
           fontSize: (theme) => {
-            const length = displayValue.length;
+            const length = displayValue.toString().length;
             if (length <= 2) return "2rem";
             if (length <= 4) return "1.5rem";
             if (length <= 6) return "1.25rem";
@@ -105,14 +105,18 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
           padding: 1,
           fontWeight: "bold",
           border: "2px solid",
-          borderColor: "primary.main",
+          borderColor: "rgba(255,255,255,0.8)",
           borderRadius: die.sides === 2 ? "50%" : 2,
           transform: `rotate(${rotationDeg}deg)`,
           transition: "transform 0.1s ease-in-out",
           wordBreak: "break-word",
           textAlign: "center",
           lineHeight: 1.2,
-          overflow: "hidden"
+          overflow: "hidden",
+          backgroundColor: "#FFFFF5",
+          color: "#444444",
+          textShadow: "0px 1px 0px rgba(255,255,255,.5), 0px -1px 0px rgba(0,0,0,.3)",
+          boxShadow: "inset 0 0 10px rgba(0,0,0,0.1)"
         }}
       >
         {displayValue}
