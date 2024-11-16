@@ -90,36 +90,168 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
         sx={{
           width: 80,
           height: 80,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: (theme) => {
-            const length = displayValue.toString().length;
-            if (length <= 2) return "2rem";
-            if (length <= 4) return "1.5rem";
-            if (length <= 6) return "1.25rem";
-            if (length <= 8) return "1rem";
-            if (length <= 10) return "0.875rem";
-            return "0.75rem";
-          },
-          padding: 1,
-          fontWeight: "bold",
-          border: "2px solid",
-          borderColor: "rgba(255,255,255,0.8)",
-          borderRadius: die.sides === 2 ? "50%" : 2,
-          transform: `rotate(${rotationDeg}deg)`,
-          transition: "transform 0.1s ease-in-out",
-          wordBreak: "break-word",
-          textAlign: "center",
-          lineHeight: 1.2,
-          overflow: "hidden",
-          backgroundColor: "#FFFFF5",
-          color: "#444444",
-          textShadow: "0px 1px 0px rgba(255,255,255,.5), 0px -1px 0px rgba(0,0,0,.3)",
-          boxShadow: "inset 0 0 10px rgba(0,0,0,0.1)"
+          perspective: "200px",
+          position: "relative"
         }}
       >
-        {displayValue}
+        <Box
+          sx={{
+            width: "100%",
+            height: "100%",
+            position: "relative",
+            transformStyle: "preserve-3d",
+            transform: rolling ? 
+              `rotateX(${rotationDeg}deg) rotateY(${rotationDeg * 1.5}deg)` : 
+              "rotateX(-10deg) rotateY(15deg)",
+            transition: "transform 0.1s ease-in-out",
+          }}
+        >
+          {/* Front face */}
+          <Box
+            sx={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: (theme) => {
+                const length = displayValue.toString().length;
+                if (length <= 2) return "2rem";
+                if (length <= 4) return "1.5rem";
+                if (length <= 6) return "1.25rem";
+                if (length <= 8) return "1rem";
+                if (length <= 10) return "0.875rem";
+                return "0.75rem";
+              },
+              fontWeight: "bold",
+              backgroundColor: "#FFFFF5",
+              color: "#444444",
+              textShadow: "0px 1px 0px rgba(255,255,255,.5), 0px -1px 0px rgba(0,0,0,.3)",
+              boxShadow: "inset 0 0 10px rgba(0,0,0,0.1)",
+              border: "2px solid rgba(255,255,255,0.8)",
+              transform: "translateZ(40px)",
+              backfaceVisibility: "hidden"
+            }}
+          >
+            {displayValue}
+          </Box>
+
+          {/* Back face */}
+          <Box
+            sx={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "inherit",
+              fontWeight: "bold",
+              backgroundColor: "#FFFFF5",
+              color: "#444444",
+              textShadow: "0px 1px 0px rgba(255,255,255,.5), 0px -1px 0px rgba(0,0,0,.3)",
+              boxShadow: "inset 0 0 10px rgba(0,0,0,0.1)",
+              border: "2px solid rgba(255,255,255,0.8)",
+              transform: "translateZ(-40px) rotateY(180deg)",
+              backfaceVisibility: "hidden"
+            }}
+          >
+            {displayValue}
+          </Box>
+
+          {/* Right face */}
+          <Box
+            sx={{
+              position: "absolute",
+              width: "80px",
+              height: "80px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "inherit",
+              fontWeight: "bold",
+              backgroundColor: "#F5F5EA", 
+              color: "#444444",
+              textShadow: "0px 1px 0px rgba(255,255,255,.5), 0px -1px 0px rgba(0,0,0,.3)",
+              boxShadow: "inset 0 0 10px rgba(0,0,0,0.1)",
+              border: "2px solid rgba(255,255,255,0.8)",
+              transform: "rotateY(90deg) translateZ(40px)",
+              backfaceVisibility: "hidden"
+            }}
+          >
+            {displayValue}
+          </Box>
+
+          {/* Left face */}
+          <Box
+            sx={{
+              position: "absolute",
+              width: "80px",
+              height: "80px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "inherit",
+              fontWeight: "bold",
+              backgroundColor: "#F5F5EA", 
+              color: "#444444",
+              textShadow: "0px 1px 0px rgba(255,255,255,.5), 0px -1px 0px rgba(0,0,0,.3)",
+              boxShadow: "inset 0 0 10px rgba(0,0,0,0.1)",
+              border: "2px solid rgba(255,255,255,0.8)",
+              transform: "rotateY(-90deg) translateZ(40px)",
+              backfaceVisibility: "hidden"
+            }}
+          >
+            {displayValue}
+          </Box>
+
+          {/* Top face */}
+          <Box
+            sx={{
+              position: "absolute",
+              width: "80px",
+              height: "80px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "inherit",
+              fontWeight: "bold",
+              backgroundColor: "#F5F5EA", 
+              color: "#444444",
+              textShadow: "0px 1px 0px rgba(255,255,255,.5), 0px -1px 0px rgba(0,0,0,.3)",
+              boxShadow: "inset 0 0 10px rgba(0,0,0,0.1)",
+              border: "2px solid rgba(255,255,255,0.8)",
+              transform: "rotateX(90deg) translateZ(40px)",
+              backfaceVisibility: "hidden"
+            }}
+          >
+            {displayValue}
+          </Box>
+
+          {/* Bottom face */}
+          <Box
+            sx={{
+              position: "absolute",
+              width: "80px",
+              height: "80px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "inherit",
+              fontWeight: "bold",
+              backgroundColor: "#F5F5EA", 
+              color: "#444444",
+              textShadow: "0px 1px 0px rgba(255,255,255,.5), 0px -1px 0px rgba(0,0,0,.3)",
+              boxShadow: "inset 0 0 10px rgba(0,0,0,0.1)",
+              border: "2px solid rgba(255,255,255,0.8)",
+              transform: "rotateX(-90deg) translateZ(40px)",
+              backfaceVisibility: "hidden"
+            }}
+          >
+            {displayValue}
+          </Box>
+        </Box>
       </Box>
 
       <Box sx={{ display: "flex", gap: 1 }}>
