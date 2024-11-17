@@ -8,6 +8,7 @@ import DiceItem from "./DiceItem";
 import { RollHistoryDrawer } from "./RollHistory";
 import type { RollHistoryItem } from "./RollHistory";
 import { DEFAULT_DICE, DEFAULT_PRESETS, type Dice, type DicePreset } from "./constants";
+import { VenmoButton } from "../VenmoButton";
 
 const DiceManager = () => {
   const [dice, setDice] = useState<Dice[]>(() => {
@@ -342,6 +343,8 @@ const DiceManager = () => {
         history={rollHistory}
         onClear={clearHistory}
       />
+
+      <VenmoButton venmoUsername="chrisdoornink" />
     </Container>
   );
 };
