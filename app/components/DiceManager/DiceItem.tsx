@@ -1,4 +1,5 @@
 import { Box, Button, Dialog, FormControl, TextField } from "@mui/material";
+import LockIcon from '@mui/icons-material/Lock';
 import React, { useEffect, useState } from "react";
 import type { Dice } from "./constants";
 
@@ -7,9 +8,18 @@ interface DiceItemProps {
   onUpdate: (die: Dice) => void;
   onDelete: (die: Dice) => void;
   rolling: boolean;
+  selected: boolean;
+  onToggleSelect: (die: Dice) => void;
 }
 
-const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling }) => {
+const DiceItem: React.FC<DiceItemProps> = ({ 
+  die, 
+  onUpdate, 
+  onDelete, 
+  rolling,
+  selected,
+  onToggleSelect 
+}) => {
   const [open, setOpen] = useState(false);
   const [displayValue, setDisplayValue] = useState(
     die.values[die.currentValue] || die.currentValue + 1
@@ -17,24 +27,27 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
   const [rotationDeg, setRotationDeg] = useState(0);
 
   useEffect(() => {
-    if (rolling) {
-      // Simple rotation animation while rolling
+    if (rolling && !selected) {
       const interval = setInterval(() => {
-        setRotationDeg(prev => (prev + 45) % 360);
-        // Cycle through values while rolling
-        setDisplayValue(die.values[Math.floor(Math.random() * die.values.length)]);
+        setDisplayValue(
+          die.values[Math.floor(Math.random() * die.values.length)]
+        );
+        setRotationDeg(prev => prev + 90);
       }, 100);
 
-      return () => {
-        clearInterval(interval);
-        // Reset rotation when rolling stops
-        setRotationDeg(0);
-      };
+      return () => clearInterval(interval);
     } else {
-      // Update display value when not rolling
-      setDisplayValue(die.values[die.currentValue] || die.currentValue + 1);
+      setDisplayValue(die.values[die.currentValue]);
     }
-  }, [rolling, die.values, die.currentValue]);
+  }, [rolling, die.values, die.currentValue, selected]);
+
+  const getFontSize = (value: string | number) => {
+    const length = value.toString().length;
+    if (length <= 2) return '2rem';
+    if (length <= 3) return '1.5rem';
+    if (length <= 4) return '1.25rem';
+    return '1rem';
+  };
 
   const handleUpdate = (event: React.FormEvent) => {
     event.preventDefault();
@@ -59,15 +72,58 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
     <Box
       sx={{
         p: 2,
-        backgroundColor: "background.paper",
+        backgroundColor: selected ? "rgba(0, 0, 0, 0.04)" : "background.paper",
         borderRadius: 2,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         gap: 2,
         position: "relative",
+        cursor: "pointer",
+        transition: "background-color 0.2s ease-in-out",
+        "&:hover": {
+          backgroundColor: selected ? "rgba(0, 0, 0, 0.04)" : "rgba(0, 0, 0, 0.02)",
+          "& .hover-lock": {
+            opacity: 0.2,
+          }
+        },
       }}
+      onClick={() => onToggleSelect(die)}
+      data-testid={`die-${die.name.toLowerCase()}`}
     >
+      {/* Lock icon for hover state */}
+      {!selected && (
+        <Box
+          className="hover-lock"
+          sx={{
+            position: "absolute",
+            top: 8,
+            right: 8,
+            color: "text.secondary",
+            opacity: 0,
+            fontSize: "1.2rem",
+            transition: "opacity 0.2s ease-in-out",
+          }}
+        >
+          <LockIcon fontSize="inherit" />
+        </Box>
+      )}
+      
+      {/* Lock icon for selected state */}
+      {selected && (
+        <Box
+          sx={{
+            position: "absolute",
+            top: 8,
+            right: 8,
+            color: "text.secondary",
+            opacity: 0.6,
+            fontSize: "1.2rem",
+          }}
+        >
+          <LockIcon fontSize="inherit" />
+        </Box>
+      )}
       <Box
         sx={{
           mb: 1,
@@ -75,11 +131,15 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
           color: "#666666",
           fontSize: "0.875rem",
         }}
+        data-testid={`die-label-${die.name.toLowerCase()}`}
       >
-        {die.name}
+        {`d${die.sides}`}
         <Box
           component="span"
-          onClick={() => setOpen(true)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpen(true);
+          }}
           sx={{
             ml: 1,
             cursor: "pointer",
@@ -90,6 +150,7 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
               textDecoration: "underline"
             }
           }}
+          data-testid={`edit-die-${die.name.toLowerCase()}`}
         >
           edit
         </Box>
@@ -109,7 +170,7 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
             height: "100%",
             position: "relative",
             transformStyle: "preserve-3d",
-            transform: rolling ? 
+            transform: rolling && !selected ? 
               `rotateX(${rotationDeg}deg) rotateY(${rotationDeg * 1.5}deg)` : 
               "rotateX(-10deg) rotateY(15deg)",
             transition: "transform 0.1s ease-in-out",
@@ -124,15 +185,7 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: (theme) => {
-                const length = displayValue.toString().length;
-                if (length <= 2) return "2rem";
-                if (length <= 4) return "1.5rem";
-                if (length <= 6) return "1.25rem";
-                if (length <= 8) return "1rem";
-                if (length <= 10) return "0.875rem";
-                return "0.75rem";
-              },
+              fontSize: getFontSize(displayValue),
               fontWeight: "bold",
               backgroundColor: "#FFFFF5",
               color: "#444444",
@@ -155,7 +208,7 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "inherit",
+              fontSize: getFontSize(displayValue),
               fontWeight: "bold",
               backgroundColor: "#FFFFF5",
               color: "#444444",
@@ -179,7 +232,7 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "inherit",
+              fontSize: getFontSize(displayValue),
               fontWeight: "bold",
               backgroundColor: "#F5F5EA", 
               color: "#444444",
@@ -203,7 +256,7 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "inherit",
+              fontSize: getFontSize(displayValue),
               fontWeight: "bold",
               backgroundColor: "#F5F5EA", 
               color: "#444444",
@@ -227,7 +280,7 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "inherit",
+              fontSize: getFontSize(displayValue),
               fontWeight: "bold",
               backgroundColor: "#F5F5EA", 
               color: "#444444",
@@ -251,7 +304,7 @@ const DiceItem: React.FC<DiceItemProps> = ({ die, onUpdate, onDelete, rolling })
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "inherit",
+              fontSize: getFontSize(displayValue),
               fontWeight: "bold",
               backgroundColor: "#F5F5EA", 
               color: "#444444",

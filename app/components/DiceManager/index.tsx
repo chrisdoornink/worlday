@@ -21,6 +21,8 @@ const DiceManager = () => {
     return savedPresets ? JSON.parse(savedPresets) : [];
   });
 
+  const [lockedDice, setLockedDice] = useState<Set<string>>(new Set());
+
   const [savePresetOpen, setSavePresetOpen] = useState(false);
   const [loadPresetOpen, setLoadPresetOpen] = useState(false);
   const [newPresetName, setNewPresetName] = useState("");
@@ -83,37 +85,48 @@ const DiceManager = () => {
   };
 
   const rollDice = () => {
-    if (dice.length === 0) return;
-    
+    const diceToRoll = dice.filter(d => !lockedDice.has(d.id));
     setRolling(true);
     
     setTimeout(() => {
-      const updatedDice = dice.map((die) => {
-        const randomIndex = Math.floor(Math.random() * die.values.length);
-        return { ...die, currentValue: randomIndex };
+      const newDice = dice.map(die => {
+        if (!lockedDice.has(die.id)) {
+          const newValue = Math.floor(Math.random() * die.values.length);
+          return {
+            ...die,
+            currentValue: newValue
+          };
+        }
+        return die;
       });
 
-      setDice(updatedDice);
+      const timestamp = Date.now();
+      const newRolls = diceToRoll.map(die => {
+        const newDie = newDice.find(d => d.id === die.id);
+        return {
+          id: uuidv4(),
+          dieName: `d${die.sides}`,
+          value: newDie ? newDie.values[newDie.currentValue] : die.values[die.currentValue],
+          timestamp
+        };
+      });
+
+      setDice(newDice);
+      setRollHistory([...newRolls, ...rollHistory]);
       setRolling(false);
     }, rollTime);
   };
 
-  useEffect(() => {
-    if (!rolling) {
-      setRollHistory((prevHistory) => [
-        ...dice.map((die) => ({
-          id: uuidv4(),
-          dieName: die.name,
-          value: die.values[die.currentValue],
-          timestamp: Date.now(),
-        })),
-        ...prevHistory,
-      ]);
-    }
-  }, [dice, rolling]);
-
-  const clearHistory = () => {
-    setRollHistory([]);
+  const toggleDieLock = (die: Dice) => {
+    setLockedDice(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(die.id)) {
+        newSet.delete(die.id);
+      } else {
+        newSet.add(die.id);
+      }
+      return newSet;
+    });
   };
 
   return (
@@ -163,6 +176,7 @@ const DiceManager = () => {
         <Button 
           variant="outlined" 
           onClick={() => setSavePresetOpen(true)}
+          disabled={dice.length === 0}
           sx={{ 
             minWidth: 100,
             color: 'text.secondary',
@@ -181,6 +195,23 @@ const DiceManager = () => {
           }}
         >
           Load Preset
+        </Button>
+      </Box>
+
+      {/* Roll Button */}
+      <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
+        <Button
+          variant="contained"
+          onClick={rollDice}
+          disabled={dice.length === 0 || rolling}
+          sx={{
+            minWidth: 200,
+            py: 1.5,
+            px: 4,
+            fontSize: '1.1rem'
+          }}
+        >
+          {rolling ? 'Rolling...' : lockedDice.size > 0 ? `Roll ${dice.length - lockedDice.size} Dice` : "Roll All"}
         </Button>
       </Box>
 
@@ -208,6 +239,8 @@ const DiceManager = () => {
                 onUpdate={updateDice}
                 onDelete={deleteDice}
                 rolling={rolling}
+                selected={lockedDice.has(die.id)}
+                onToggleSelect={toggleDieLock}
               />
             </Grid>
           ))}
@@ -223,21 +256,6 @@ const DiceManager = () => {
         mt: 'auto', 
         pt: 4 
       }}>
-        {/* Roll Button */}
-        <Button
-          variant="contained"
-          onClick={rollDice}
-          disabled={dice.length === 0 || rolling}
-          sx={{
-            minWidth: 200,
-            py: 1.5,
-            px: 4,
-            fontSize: '1.1rem'
-          }}
-        >
-          {rolling ? 'Rolling...' : 'Roll Dice'}
-        </Button>
-
         {/* Roll Speed Controls */}
         <Box sx={{ 
           display: 'flex',
@@ -341,7 +359,7 @@ const DiceManager = () => {
         open={historyOpen}
         onClose={() => setHistoryOpen(false)}
         history={rollHistory}
-        onClear={clearHistory}
+        onClear={() => setRollHistory([])}
       />
 
       <VenmoButton venmoUsername="chrisdoornink" />
