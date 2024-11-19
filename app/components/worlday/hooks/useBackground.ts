@@ -15,6 +15,7 @@ interface Cloud {
   left: string;
   duration: string;
   top: string;
+  delay: string;
 }
 
 interface Star {
@@ -104,8 +105,12 @@ export const useBackground = () => {
   useEffect(() => {
     const generateCloud = (index: number): Cloud => {
       const cloudType = CLOUD_SETTINGS.types[index % CLOUD_SETTINGS.types.length];
-      const duration = (45 + Math.random() * 30) / CLOUD_SETTINGS.speedMultiplier[weather];
-      const topPosition = 10 + Math.random() * 40; // Random vertical position between 10% and 50%
+      const baseSpeed = CLOUD_SETTINGS.speedMultiplier[weather];
+      // More varied durations: between 30s and 90s
+      const duration = (80 + Math.random() * 40) / baseSpeed;
+      const topPosition = 10 + Math.random() * 40;
+      // Initial delay to distribute clouds across the screen
+      const initialDelay = -Math.random() * duration;
       
       return {
         key: Date.now() + index,
@@ -113,6 +118,7 @@ export const useBackground = () => {
         left: '0',
         duration: `${duration}s`,
         top: `${topPosition}%`,
+        delay: `${initialDelay}s`,
       };
     };
 
@@ -150,12 +156,7 @@ export const useBackground = () => {
       setWeatherParticles(newParticles);
     };
 
-    const interval = setInterval(() => {
-      setWeather(getRandomWeather());
-      generateWeatherParticles();
-    }, WEATHER_SETTINGS.updateInterval);
-
-    return () => clearInterval(interval);
+    generateWeatherParticles();
   }, [weather]);
 
   const isNightTime = timeOfDay === 'night' || timeOfDay === 'dusk';

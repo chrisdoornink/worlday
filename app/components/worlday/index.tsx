@@ -55,6 +55,7 @@ const World = () => {
             left: cloud.left,
             animationDuration: cloud.duration,
             top: cloud.top,
+            animationDelay: cloud.delay,
           }}
         />
       ))}

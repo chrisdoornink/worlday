@@ -4,14 +4,14 @@ export type Weather = (typeof WEATHER_TYPES)[number];
 
 // Weather Probabilities (must sum to 1)
 export const WEATHER_PROBABILITIES = {
-  clear: 0.1,
-  rain: 0.85,
-  snow: 0.05,
+  // clear: 0.7,
+  // rain: 0.25,
+  // snow: 0.05,
+  rain: 1
 };
 
 // Weather Settings
 export const WEATHER_SETTINGS = {
-  updateInterval: 300000, // 5 minutes in milliseconds
   particles: {
     rain: {
       count: 100,
@@ -55,7 +55,6 @@ export const CLOUD_SETTINGS = {
     snow: 8,
   },
   types: ['cloud1', 'cloud2', 'cloud3'] as const,
-  updateInterval: 15000, // 15 seconds in milliseconds
   speedMultiplier: {
     clear: 1,
     rain: 0.7, // slower during rain
