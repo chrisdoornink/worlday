@@ -29,7 +29,10 @@ export default function Worlday() {
         className={`${styles.celestialBody} ${
           isNightTime ? styles.moon : styles.sun
         } ${weather !== 'clear' ? styles.sunDim : ''}`}
-        style={celestialPosition}
+        style={{
+          left: celestialPosition.x,
+          top: celestialPosition.y,
+        }}
       />
 
       {/* Crows */}
