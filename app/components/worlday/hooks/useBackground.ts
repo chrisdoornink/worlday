@@ -1,9 +1,20 @@
 import { useState, useEffect } from 'react';
+import {
+  WEATHER_SETTINGS,
+  TIME_PERIODS,
+  STAR_SETTINGS,
+  CLOUD_SETTINGS,
+  getRandomWeather,
+  type Weather,
+  type TimeOfDay,
+} from '../constants';
 
 interface Cloud {
   key: number;
   type: string;
   left: string;
+  duration: string;
+  top: string;
 }
 
 interface Star {
@@ -21,15 +32,12 @@ interface WeatherParticle {
   delay: string;
 }
 
-type TimeOfDay = 'dawn' | 'morning' | 'noon' | 'afternoon' | 'dusk' | 'night';
-type Weather = 'clear' | 'rain' | 'snow';
-
 export const useBackground = () => {
   const [clouds, setClouds] = useState<Cloud[]>([]);
   const [stars, setStars] = useState<Star[]>([]);
   const [weatherParticles, setWeatherParticles] = useState<WeatherParticle[]>([]);
   const [timeOfDay, setTimeOfDay] = useState<TimeOfDay>('morning');
-  const [weather, setWeather] = useState<Weather>('clear');
+  const [weather, setWeather] = useState<Weather>(getRandomWeather());
 
   // Calculate sun/moon position based on time
   const getCelestialPosition = () => {
@@ -48,11 +56,15 @@ export const useBackground = () => {
   const getTimeOfDay = (): TimeOfDay => {
     const hour = new Date().getHours();
     
-    if (hour >= 5 && hour < 7) return 'dawn';
-    if (hour >= 7 && hour < 11) return 'morning';
-    if (hour >= 11 && hour < 16) return 'noon';
-    if (hour >= 16 && hour < 19) return 'afternoon';
-    if (hour >= 19 && hour < 21) return 'dusk';
+    for (const [period, times] of Object.entries(TIME_PERIODS)) {
+      if (
+        (times.start < times.end && hour >= times.start && hour < times.end) ||
+        (times.start > times.end && (hour >= times.start || hour < times.end))
+      ) {
+        return period as TimeOfDay;
+      }
+    }
+    
     return 'night';
   };
 
@@ -60,15 +72,14 @@ export const useBackground = () => {
   useEffect(() => {
     const generateStars = () => {
       const newStars: Star[] = [];
-      const starCount = 100;
 
-      for (let i = 0; i < starCount; i++) {
+      for (let i = 0; i < STAR_SETTINGS.count; i++) {
         newStars.push({
           key: i,
-          top: `${Math.random() * 70}%`,
+          top: `${Math.random() * STAR_SETTINGS.maxHeight}%`,
           left: `${Math.random() * 100}%`,
-          delay: `${Math.random() * 2}s`,
-          bright: Math.random() > 0.7,
+          delay: `${Math.random() * STAR_SETTINGS.twinkleMaxDuration}s`,
+          bright: Math.random() > (1 - STAR_SETTINGS.brightProbability),
         });
       }
       setStars(newStars);
@@ -91,57 +102,58 @@ export const useBackground = () => {
 
   // Generate clouds
   useEffect(() => {
-    const generateClouds = () => {
-      const newClouds: Cloud[] = [];
-      const cloudTypes = ['cloud1', 'cloud2', 'cloud3'];
+    const generateCloud = (index: number): Cloud => {
+      const cloudType = CLOUD_SETTINGS.types[index % CLOUD_SETTINGS.types.length];
+      const duration = (45 + Math.random() * 30) / CLOUD_SETTINGS.speedMultiplier[weather];
+      const topPosition = 10 + Math.random() * 40; // Random vertical position between 10% and 50%
       
-      for (let i = 0; i < 6; i++) {
-        newClouds.push({
-          key: i,
-          type: cloudTypes[i % 3],
-          left: `${Math.random() * 100}%`,
-        });
-      }
-      setClouds(newClouds);
+      return {
+        key: Date.now() + index,
+        type: cloudType,
+        left: '0',
+        duration: `${duration}s`,
+        top: `${topPosition}%`,
+      };
     };
 
-    generateClouds();
-    const interval = setInterval(generateClouds, 30000);
-
-    return () => clearInterval(interval);
-  }, []);
+    // Initial cloud generation
+    const initialClouds: Cloud[] = [];
+    for (let i = 0; i < CLOUD_SETTINGS.count[weather]; i++) {
+      initialClouds.push(generateCloud(i));
+    }
+    setClouds(initialClouds);
+  }, [weather]); // Only regenerate all clouds when weather changes
 
   // Generate weather particles
   useEffect(() => {
     const generateWeatherParticles = () => {
+      console.log('Generating weather particles for', weather);
       if (weather === 'clear') {
         setWeatherParticles([]);
         return;
       }
 
+      const settings = WEATHER_SETTINGS.particles[weather];
       const newParticles: WeatherParticle[] = [];
-      const particleCount = weather === 'rain' ? 100 : 50;
 
-      for (let i = 0; i < particleCount; i++) {
+      for (let i = 0; i < settings.count; i++) {
         newParticles.push({
           key: i,
           left: `${Math.random() * 100}%`,
-          animationDuration: `${weather === 'rain' ? 
-            0.8 + Math.random() * 0.3 : 
-            3 + Math.random() * 2}s`,
-          delay: `${Math.random() * 2}s`,
+          animationDuration: `${
+            settings.minDuration +
+            Math.random() * (settings.maxDuration - settings.minDuration)
+          }s`,
+          delay: `${Math.random() * -2}s`, // Negative delay for initial stagger
         });
       }
       setWeatherParticles(newParticles);
     };
 
-    generateWeatherParticles();
-    // Change weather randomly every 5 minutes
     const interval = setInterval(() => {
-      const weathers: Weather[] = ['clear', 'rain', 'snow'];
-      const newWeather = weathers[Math.floor(Math.random() * weathers.length)];
-      setWeather(newWeather);
-    }, 300000);
+      setWeather(getRandomWeather());
+      generateWeatherParticles();
+    }, WEATHER_SETTINGS.updateInterval);
 
     return () => clearInterval(interval);
   }, [weather]);

@@ -19,7 +19,9 @@ const World = () => {
     <div className={`${styles.worldContainer} ${styles[timeOfDay]}`}>
       {/* Celestial body (sun or moon) */}
       <div
-        className={`${styles.celestialBody} ${isNightTime ? styles.moon : styles.sun}`}
+        className={`${styles.celestialBody} ${
+          isNightTime ? styles.moon : styles.sun
+        } ${weather !== 'clear' ? styles.sunDim : ''}`}
         style={{
           left: celestialPosition.x,
           top: celestialPosition.y,
@@ -46,8 +48,14 @@ const World = () => {
           key={cloud.key}
           className={`${styles.cloud} ${styles[cloud.type]} ${
             isNightTime ? styles.nightCloud : styles.dayCloud
+          } ${weather === 'rain' ? styles.rainCloud : ''} ${
+            weather === 'snow' ? styles.snowCloud : ''
           }`}
-          style={{ left: cloud.left }}
+          style={{ 
+            left: cloud.left,
+            animationDuration: cloud.duration,
+            top: cloud.top,
+          }}
         />
       ))}
 
