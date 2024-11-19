@@ -33,10 +33,22 @@ interface WeatherParticle {
   delay: string;
 }
 
+interface Bird {
+  key: number;
+  style: {
+    '--fly-y': string;
+    '--bird-scale': string;
+    animationDuration: string;
+    top: string;
+    delay: string;
+  };
+}
+
 export const useBackground = () => {
   const [clouds, setClouds] = useState<Cloud[]>([]);
   const [stars, setStars] = useState<Star[]>([]);
   const [weatherParticles, setWeatherParticles] = useState<WeatherParticle[]>([]);
+  const [birds, setBirds] = useState<Bird[]>([]);
   const [timeOfDay, setTimeOfDay] = useState<TimeOfDay>('morning');
   const [weather, setWeather] = useState<Weather>(getRandomWeather());
 
@@ -159,6 +171,47 @@ export const useBackground = () => {
     generateWeatherParticles();
   }, [weather]);
 
+  // Generate birds
+  useEffect(() => {
+    const generateBird = (index: number, groupPosition: number, totalInGroup: number): Bird => {
+      const baseSpeed = 45;
+      const duration = baseSpeed + Math.random() * 10; // 45-55 seconds to cross
+      const groupSpread = 15; // How spread out the group is vertically
+      const baseTop = 5 + Math.random() * 15; // Base position for the group
+      const verticalOffset = (groupSpread / totalInGroup) * groupPosition; // Distribute birds vertically
+      const horizontalOffset = Math.random() * 10; // Slight horizontal variation within group
+      
+      return {
+        key: Date.now() + index,
+        style: {
+          '--fly-y': `${-5 + Math.random() * 10}px`, // Small random vertical movement
+          '--bird-scale': (0.8 + Math.random() * 0.2).toString(), // Subtle size variation
+          animationDuration: `${duration + horizontalOffset}s`,
+          top: `${baseTop + verticalOffset}%`,
+          delay: `${-Math.random() * duration}s`,
+        },
+      };
+    };
+
+    // Generate new birds every 30-60 seconds
+    const generateBirds = () => {
+      if (weather === 'clear') {
+        const groupSize = 1 + Math.floor(Math.random() * 12); // 1-12 birds per group
+        const newBirds = Array.from({ length: groupSize }, (_, i) => 
+          generateBird(i, i, groupSize)
+        );
+        setBirds(prev => [...prev.slice(-12), ...newBirds]); // Keep max 24 birds (potentially 2 groups)
+      } else {
+        setBirds([]); // No birds in bad weather
+      }
+    };
+
+    generateBirds(); // Initial generation
+    const interval = setInterval(generateBirds, 30000 + Math.random() * 30000); // Random interval between 30-60s
+
+    return () => clearInterval(interval);
+  }, [weather]);
+
   const isNightTime = timeOfDay === 'night' || timeOfDay === 'dusk';
   const celestialPosition = getCelestialPosition();
 
@@ -166,6 +219,7 @@ export const useBackground = () => {
     clouds,
     stars,
     weatherParticles,
+    birds,
     timeOfDay,
     weather,
     isNightTime,

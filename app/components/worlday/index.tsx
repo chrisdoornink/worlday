@@ -4,9 +4,10 @@ import React from 'react';
 import styles from './styles.module.css';
 import { useBackground } from './hooks/useBackground';
 
-const World = () => {
+export default function Worlday() {
   const {
     clouds,
+    birds,
     stars,
     weatherParticles,
     timeOfDay,
@@ -27,11 +28,17 @@ const World = () => {
         className={`${styles.celestialBody} ${
           isNightTime ? styles.moon : styles.sun
         } ${weather !== 'clear' ? styles.sunDim : ''}`}
-        style={{
-          left: celestialPosition.x,
-          top: celestialPosition.y,
-        }}
+        style={celestialPosition}
       />
+
+      {/* Birds */}
+      {birds.map((bird) => (
+        <div
+          key={bird.key}
+          className={`${styles.bird} ${isNightTime ? styles.nightBird : ''}`}
+          style={bird.style}
+        />
+      ))}
 
       {/* Stars (only visible at night) */}
       {isNightTime &&
@@ -81,5 +88,3 @@ const World = () => {
     </div>
   );
 };
-
-export default World;
