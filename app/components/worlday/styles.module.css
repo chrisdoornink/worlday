@@ -8,36 +8,80 @@
   transition: background 3s ease;
 }
 
-/* Dawn: 5:00-7:00 */
+/* Time of Day Styles */
 .dawn {
   background: linear-gradient(180deg, #FF7F50 0%, #FFB6C1 50%, #E0F6FF 100%);
 }
 
-/* Morning: 7:00-11:00 */
 .morning {
   background: linear-gradient(180deg, #87CEEB 0%, #B0E2FF 50%, #E0F6FF 100%);
 }
 
-/* Noon: 11:00-16:00 */
 .noon {
   background: linear-gradient(180deg, #4A90E2 0%, #87CEEB 50%, #B0E2FF 100%);
 }
 
-/* Afternoon: 16:00-19:00 */
 .afternoon {
   background: linear-gradient(180deg, #FFB6C1 0%, #FFA07A 50%, #FFD700 100%);
 }
 
-/* Dusk: 19:00-21:00 */
 .dusk {
   background: linear-gradient(180deg, #4B0082 0%, #800080 50%, #FF69B4 100%);
 }
 
-/* Night: 21:00-5:00 */
 .night {
   background: linear-gradient(180deg, #191970 0%, #000033 50%, #191970 100%);
 }
 
+/* Celestial Bodies */
+.celestialBody {
+  position: absolute;
+  border-radius: 50%;
+  transition: all 3s ease;
+}
+
+.sun {
+  width: 80px;
+  height: 80px;
+  background: #FFD700;
+  box-shadow: 0 0 60px #FFD700;
+}
+
+.moon {
+  width: 60px;
+  height: 60px;
+  background: #F5F5F5;
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.5);
+}
+
+/* Stars */
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 1.5s infinite ease-in-out alternate;
+}
+
+.starBright {
+  width: 3px;
+  height: 3px;
+  animation-duration: 2s;
+}
+
+@keyframes twinkle {
+  from {
+    opacity: 0.2;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* Clouds */
 .cloud {
   position: absolute;
   border-radius: 50px;
@@ -45,7 +89,6 @@
   animation: float linear infinite;
 }
 
-/* Adjust cloud appearance based on time */
 .dayCloud {
   background: white;
   opacity: 0.8;
@@ -77,11 +120,48 @@
   animation-duration: 75s;
 }
 
+/* Weather Effects */
+.rain {
+  position: absolute;
+  width: 2px;
+  height: 20px;
+  background: linear-gradient(transparent, rgba(255, 255, 255, 0.5));
+  animation: rainfall linear infinite;
+}
+
+.snow {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  filter: blur(1px);
+  animation: snowfall linear infinite;
+}
+
 @keyframes float {
   from {
     transform: translateX(-200px);
   }
   to {
     transform: translateX(100vw);
+  }
+}
+
+@keyframes rainfall {
+  from {
+    transform: translateY(-120vh) translateX(0);
+  }
+  to {
+    transform: translateY(20vh) translateX(-20px);
+  }
+}
+
+@keyframes snowfall {
+  from {
+    transform: translateY(-120vh) translateX(0) rotate(0deg);
+  }
+  to {
+    transform: translateY(20vh) translateX(-20px) rotate(360deg);
   }
 }
