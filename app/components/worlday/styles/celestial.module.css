@@ -1,0 +1,26 @@
+/* Celestial Bodies */
+.celestialBody {
+    position: absolute;
+    border-radius: 50%;
+    transition: all 3s ease;
+  }
+  
+  .sun {
+    width: 80px;
+    height: 80px;
+    background: #FFD700;
+    box-shadow: 0 0 60px #FFD700;
+    transition: all 1s ease;
+  }
+  
+  .sunDim {
+    opacity: 0.3;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+  }
+  
+  .moon {
+    width: 60px;
+    height: 60px;
+    background: #F5F5F5;
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.5);
+  }

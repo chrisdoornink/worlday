@@ -1,7 +1,11 @@
 'use client';
 
 import React from 'react';
-import styles from './styles.module.css';
+import worldStyles from './styles/world.module.css';
+import celestialStyles from './styles/celestial.module.css';
+import birdStyles from './styles/birds.module.css';
+import starStyles from './styles/stars.module.css';
+import weatherStyles from './styles/weather.module.css';
 import { useBackground } from './hooks/useBackground';
 import { Crow } from './components/crow';
 
@@ -18,17 +22,17 @@ export default function Worlday() {
   } = useBackground();
 
   return (
-    <div className={`${styles.worldContainer} ${styles[timeOfDay]}`}>
+    <div className={`${worldStyles.worldContainer} ${worldStyles[timeOfDay]}`}>
       {/* Background cloud for rain and snow */}
       {(weather === 'rain' || weather === 'snow') && (
-        <div className={`${styles.backgroundCloud} ${weather === 'snow' ? styles.snowCloud : ''}`} />
+        <div className={`${weatherStyles.backgroundCloud} ${weather === 'snow' ? weatherStyles.snowCloud : ''}`} />
       )}
       
       {/* Celestial body (sun or moon) */}
       <div
-        className={`${styles.celestialBody} ${
-          isNightTime ? styles.moon : styles.sun
-        } ${weather !== 'clear' ? styles.sunDim : ''}`}
+        className={`${celestialStyles.celestialBody} ${
+          isNightTime ? celestialStyles.moon : celestialStyles.sun
+        } ${weather !== 'clear' ? celestialStyles.sunDim : ''}`}
         style={{
           left: celestialPosition.x,
           top: celestialPosition.y,
@@ -67,11 +71,11 @@ export default function Worlday() {
       {birds.map((bird) => (
         <div
           key={bird.key}
-          className={styles.birdWrapper}
+          className={birdStyles.birdWrapper}
           style={bird.style}
         >
           <div 
-            className={`${styles.bird} ${isNightTime ? styles.nightBird : ''}`}
+            className={`${birdStyles.bird} ${isNightTime ? birdStyles.nightBird : ''}`}
             style={bird.flapStyle}
           />
         </div>
@@ -82,7 +86,7 @@ export default function Worlday() {
         stars.map(star => (
           <div
             key={star.key}
-            className={`${styles.star} ${star.bright ? styles.starBright : ''}`}
+            className={`${starStyles.star} ${star.bright ? starStyles.starBright : ''}`}
             style={{
               top: star.top,
               left: star.left,
@@ -95,10 +99,10 @@ export default function Worlday() {
       {clouds.map(cloud => (
         <div
           key={cloud.key}
-          className={`${styles.cloud} ${styles[cloud.type]} ${
-            isNightTime ? styles.nightCloud : styles.dayCloud
-          } ${weather === 'rain' ? styles.rainCloud : ''} ${
-            weather === 'snow' ? styles.snowCloud : ''
+          className={`${weatherStyles.cloud} ${weatherStyles[cloud.type]} ${
+            isNightTime ? weatherStyles.nightCloud : weatherStyles.dayCloud
+          } ${weather === 'rain' ? weatherStyles.rainCloud : ''} ${
+            weather === 'snow' ? weatherStyles.snowCloud : ''
           }`}
           style={{ 
             left: cloud.left,
@@ -114,7 +118,7 @@ export default function Worlday() {
         weatherParticles.map(particle => (
           <div
             key={particle.key}
-            className={styles[weather]}
+            className={weatherStyles[weather]}
             style={{
               left: particle.left,
               animationDuration: particle.animationDuration,

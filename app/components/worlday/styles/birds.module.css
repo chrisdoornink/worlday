@@ -1,0 +1,38 @@
+/* Birds */
+.birdWrapper {
+    position: absolute;
+    animation: fly linear infinite;
+  }
+  
+  .bird {
+    width: 8px;
+    height: 4px;
+    background: black;
+    clip-path: path('M1.5,2c0,0,1.5-2,2.5-2s2.5,2,2.5,2s-1.5,2-2.5,2S1.5,2,1.5,2z');
+    opacity: 0.6;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    animation: flap 0.4s ease-in-out infinite;
+  }
+  
+  .nightBird {
+    opacity: 0.3;
+  }
+  
+  @keyframes flap {
+    0%, 100% {
+      transform: rotateX(60deg);
+    }
+    50% {
+      transform: rotateX(-60deg);
+    }
+  }
+  
+  @keyframes fly {
+    from {
+      transform: translateX(-120vw) translateY(var(--fly-y, 0)) scale(var(--bird-scale, 1));
+    }
+    to {
+      transform: translateX(120vw) translateY(var(--fly-y, 0)) scale(var(--bird-scale, 1));
+    }
+  }

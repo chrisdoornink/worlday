@@ -4,8 +4,8 @@ export type Weather = (typeof WEATHER_TYPES)[number];
 
 // Weather Probabilities (must sum to 1)
 export const WEATHER_PROBABILITIES = {
-  clear: 0.7,
-  rain: 0.25,
+  clear: 0.75,
+  rain: 0.2,
   snow: 0.05,
 };
 

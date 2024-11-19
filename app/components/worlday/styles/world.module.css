@@ -1,0 +1,35 @@
+.worldContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    transition: background 3s ease;
+  }
+  
+  /* Time of Day Styles */
+  .dawn {
+    background: linear-gradient(180deg, #FF7F50 0%, #FFB6C1 50%, #E0F6FF 100%);
+  }
+  
+  .morning {
+    background: linear-gradient(180deg, #87CEEB 0%, #B0E2FF 50%, #E0F6FF 100%);
+  }
+  
+  .noon {
+    background: linear-gradient(180deg, #4A90E2 0%, #87CEEB 50%, #B0E2FF 100%);
+  }
+  
+  .afternoon {
+    background: linear-gradient(180deg, #FFB6C1 0%, #FFA07A 50%, #FFD700 100%);
+  }
+  
+  .dusk {
+    background: linear-gradient(180deg, #4B0082 0%, #800080 50%, #FF69B4 100%);
+  }
+  
+  .night {
+    background: linear-gradient(180deg, #191970 0%, #000033 50%, #191970 100%);
+  }
+  
