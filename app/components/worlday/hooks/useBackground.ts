@@ -1,3 +1,5 @@
+'use client';
+
 import { useBirds } from './useBirds';
 import { useStars } from './useStars';
 import { useWeather } from './useWeather';

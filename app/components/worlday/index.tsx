@@ -6,6 +6,7 @@ import celestialStyles from './styles/celestial.module.css';
 import birdStyles from './styles/birds.module.css';
 import starStyles from './styles/stars.module.css';
 import weatherStyles from './styles/weather.module.css';
+import landscapeStyles from './styles/landscape.module.css';
 import { useBackground } from './hooks/useBackground';
 import { Crow } from './components/crow';
 
@@ -81,7 +82,7 @@ export default function Worlday() {
         </div>
       ))}
 
-      {/* Stars (only visible at night) */}
+      {/* Stars */}
       {isNightTime &&
         stars.map(star => (
           <div
@@ -126,6 +127,11 @@ export default function Worlday() {
             }}
           />
         ))}
+
+      {/* Landscape */}
+      <div className={landscapeStyles.horizon} />
+      <div className={landscapeStyles.mountains} />
+      <div className={`${landscapeStyles.ground} ${landscapeStyles[`ground${timeOfDay.charAt(0).toUpperCase() + timeOfDay.slice(1)}`]}`} />
     </div>
   );
 };

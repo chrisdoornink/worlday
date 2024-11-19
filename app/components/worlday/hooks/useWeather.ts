@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import { CLOUD_SETTINGS, WEATHER_SETTINGS, Weather, getRandomWeather } from '../constants';
 

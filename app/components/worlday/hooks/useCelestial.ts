@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import { TIME_PERIODS, TimeOfDay } from '../constants';
 
