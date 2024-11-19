@@ -17,6 +17,11 @@ const World = () => {
 
   return (
     <div className={`${styles.worldContainer} ${styles[timeOfDay]}`}>
+      {/* Background cloud for rain and snow */}
+      {(weather === 'rain' || weather === 'snow') && (
+        <div className={`${styles.backgroundCloud} ${weather === 'snow' ? styles.snowCloud : ''}`} />
+      )}
+      
       {/* Celestial body (sun or moon) */}
       <div
         className={`${styles.celestialBody} ${

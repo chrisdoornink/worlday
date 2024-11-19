@@ -108,7 +108,7 @@ export const useBackground = () => {
       const baseSpeed = CLOUD_SETTINGS.speedMultiplier[weather];
       // More varied durations: between 30s and 90s
       const duration = (80 + Math.random() * 40) / baseSpeed;
-      const topPosition = 10 + Math.random() * 40;
+      const topPosition = 5 + Math.random() * 25; // Move range from 5% to 30% instead of 10% to 50%
       // Initial delay to distribute clouds across the screen
       const initialDelay = -Math.random() * duration;
       
