@@ -4,6 +4,84 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(to bottom, #87CEEB, #E0F6FF); /* Simple sky gradient */
   overflow: hidden;
+  transition: background 3s ease;
+}
+
+/* Dawn: 5:00-7:00 */
+.dawn {
+  background: linear-gradient(180deg, #FF7F50 0%, #FFB6C1 50%, #E0F6FF 100%);
+}
+
+/* Morning: 7:00-11:00 */
+.morning {
+  background: linear-gradient(180deg, #87CEEB 0%, #B0E2FF 50%, #E0F6FF 100%);
+}
+
+/* Noon: 11:00-16:00 */
+.noon {
+  background: linear-gradient(180deg, #4A90E2 0%, #87CEEB 50%, #B0E2FF 100%);
+}
+
+/* Afternoon: 16:00-19:00 */
+.afternoon {
+  background: linear-gradient(180deg, #FFB6C1 0%, #FFA07A 50%, #FFD700 100%);
+}
+
+/* Dusk: 19:00-21:00 */
+.dusk {
+  background: linear-gradient(180deg, #4B0082 0%, #800080 50%, #FF69B4 100%);
+}
+
+/* Night: 21:00-5:00 */
+.night {
+  background: linear-gradient(180deg, #191970 0%, #000033 50%, #191970 100%);
+}
+
+.cloud {
+  position: absolute;
+  border-radius: 50px;
+  filter: blur(3px);
+  animation: float linear infinite;
+}
+
+/* Adjust cloud appearance based on time */
+.dayCloud {
+  background: white;
+  opacity: 0.8;
+}
+
+.nightCloud {
+  background: #2B4865;
+  opacity: 0.4;
+}
+
+.cloud1 {
+  width: 120px;
+  height: 40px;
+  top: 20%;
+  animation-duration: 60s;
+}
+
+.cloud2 {
+  width: 80px;
+  height: 30px;
+  top: 45%;
+  animation-duration: 45s;
+}
+
+.cloud3 {
+  width: 160px;
+  height: 50px;
+  top: 10%;
+  animation-duration: 75s;
+}
+
+@keyframes float {
+  from {
+    transform: translateX(-200px);
+  }
+  to {
+    transform: translateX(100vw);
+  }
 }
