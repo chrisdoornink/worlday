@@ -38,9 +38,13 @@ interface Bird {
   style: {
     '--fly-y': string;
     '--bird-scale': string;
+    '--fly-x': string;
     animationDuration: string;
     top: string;
-    delay: string;
+    animationDelay: string;
+  };
+  flapStyle: {
+    animationDelay: string;
   };
 }
 
@@ -184,11 +188,15 @@ export const useBackground = () => {
       return {
         key: Date.now() + index,
         style: {
-          '--fly-y': `${-5 + Math.random() * 10}px`, // Small random vertical movement
-          '--bird-scale': (0.8 + Math.random() * 0.2).toString(), // Subtle size variation
+          '--fly-y': `${-5 + Math.random() * 10}px`,
+          '--bird-scale': (0.8 + Math.random() * 0.2).toString(),
+          '--fly-x': `${Math.random() * 10}px`,
           animationDuration: `${duration + horizontalOffset}s`,
           top: `${baseTop + verticalOffset}%`,
-          delay: `${-Math.random() * duration}s`,
+          animationDelay: `${-Math.random() * duration}s`,
+        },
+        flapStyle: {
+          animationDelay: `${Math.random() * 0.4}s`, // Random delay for flapping
         },
       };
     };

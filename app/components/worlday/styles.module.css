@@ -223,19 +223,33 @@
 }
 
 /* Birds */
-.bird {
+.birdWrapper {
   position: absolute;
+  animation: fly linear infinite;
+}
+
+.bird {
   width: 8px;
   height: 4px;
   background: black;
   clip-path: path('M1.5,2c0,0,1.5-2,2.5-2s2.5,2,2.5,2s-1.5,2-2.5,2S1.5,2,1.5,2z');
-  animation: fly linear infinite;
   opacity: 0.6;
-  will-change: transform;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  animation: flap 0.4s ease-in-out infinite;
 }
 
 .nightBird {
   opacity: 0.3;
+}
+
+@keyframes flap {
+  0%, 100% {
+    transform: rotateX(60deg);
+  }
+  50% {
+    transform: rotateX(-60deg);
+  }
 }
 
 @keyframes fly {
