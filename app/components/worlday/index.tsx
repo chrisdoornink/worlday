@@ -11,7 +11,7 @@ import { useBackground } from './hooks/useBackground';
 import { Crow } from './components/crow';
 import { Cricket } from './components/cricket';
 
-export default function Worlday() {
+export default function World() {
   const {
     clouds,
     crickets,
