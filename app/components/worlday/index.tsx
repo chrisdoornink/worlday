@@ -10,6 +10,7 @@ import landscapeStyles from './styles/landscape.module.css';
 import { useBackground } from './hooks/useBackground';
 import { Crow } from './components/crow';
 import { Cricket } from './components/cricket';
+import RandomMountains from './components/mountains/RandomMountains';
 
 export default function World() {
   const {
@@ -132,7 +133,10 @@ export default function World() {
 
       {/* Landscape */}
       <div className={landscapeStyles.horizon} />
-      <div className={landscapeStyles.mountains} />
+      {/* These are static mountains, if you want the same every time: */}
+      {/* <div className={landscapeStyles.mountains} /> */}
+      {/* IF you want random mountains every time, use this: */}
+      <RandomMountains timestamp={Date.now()} />
       <div className={`${landscapeStyles.ground} ${landscapeStyles[`ground${timeOfDay.charAt(0).toUpperCase() + timeOfDay.slice(1)}`]}`} />
 
       {/* Crickets */}
