@@ -1,0 +1,23 @@
+.blade {
+  position: absolute;
+  width: 2px;
+  background: linear-gradient(to top, #2d5a27, #3d7a37);
+  border-radius: 1px 1px 0 0;
+  transform-origin: bottom center;
+  animation: sway 3s ease-in-out infinite;
+  animation-delay: calc(var(--random-delay, 0) * -1s);
+  pointer-events: none;
+  z-index: 2; /* Add z-index to appear above ground */
+}
+
+@keyframes sway {
+  0% {
+    transform: rotate(calc(var(--wind-direction, 0) * -2deg * var(--wind-intensity, 0)));
+  }
+  50% {
+    transform: rotate(calc(var(--wind-direction, 0) * 5deg * var(--wind-intensity, 0)));
+  }
+  100% {
+    transform: rotate(calc(var(--wind-direction, 0) * -2deg * var(--wind-intensity, 0)));
+  }
+}
