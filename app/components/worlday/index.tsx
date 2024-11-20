@@ -11,6 +11,7 @@ import { useBackground } from './hooks/useBackground';
 import { Crow } from './components/crow';
 import { Cricket } from './components/cricket';
 import RandomMountains from './components/mountains/RandomMountains';
+import { Plants } from './components/plants/Plants';
 
 export default function World() {
   const {
@@ -24,6 +25,8 @@ export default function World() {
     isNightTime,
     celestialPosition,
   } = useBackground();
+
+  const landscapeTimestamp = React.useMemo(() => Date.now(), []);
 
   return (
     <div className={`${worldStyles.worldContainer} ${worldStyles[timeOfDay]}`}>
@@ -136,7 +139,8 @@ export default function World() {
       {/* These are static mountains, if you want the same every time: */}
       {/* <div className={landscapeStyles.mountains} /> */}
       {/* IF you want random mountains every time, use this: */}
-      <RandomMountains timestamp={Date.now()} />
+      <RandomMountains timestamp={landscapeTimestamp} />
+      <Plants count={30} distribution={{ grass: 0.7, flowers: 0.3 }} key={landscapeTimestamp} />
       <div className={`${landscapeStyles.ground} ${landscapeStyles[`ground${timeOfDay.charAt(0).toUpperCase() + timeOfDay.slice(1)}`]}`} />
 
       {/* Crickets */}
