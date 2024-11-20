@@ -9,10 +9,12 @@ import weatherStyles from './styles/weather.module.css';
 import landscapeStyles from './styles/landscape.module.css';
 import { useBackground } from './hooks/useBackground';
 import { Crow } from './components/crow';
+import { Cricket } from './components/cricket';
 
 export default function Worlday() {
   const {
     clouds,
+    crickets,
     birds,
     stars,
     weatherParticles,
@@ -132,6 +134,14 @@ export default function Worlday() {
       <div className={landscapeStyles.horizon} />
       <div className={landscapeStyles.mountains} />
       <div className={`${landscapeStyles.ground} ${landscapeStyles[`ground${timeOfDay.charAt(0).toUpperCase() + timeOfDay.slice(1)}`]}`} />
+
+      {/* Crickets */}
+      {crickets.map(cricket => (
+        <Cricket
+          key={cricket.key}
+          position={{ x: cricket.x, y: cricket.y }}
+        />
+      ))}
     </div>
   );
 };
