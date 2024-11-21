@@ -10,6 +10,27 @@
   z-index: 2;
 }
 
+/* Flower styles */
+.flower {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  background: var(--flower-color);
+  border-radius: 50%;
+  filter: blur(0.5px) brightness(1.4) contrast(1.2);
+  box-shadow: 
+    0 0 2px var(--flower-color),
+    0 0 4px color-mix(in srgb, var(--flower-color), transparent 30%),
+    0 0 6px color-mix(in srgb, var(--flower-color), white 20%),
+    inset 0 0 2px rgba(255, 255, 255, 0.8);
+  animation: flowerSway 3s ease-in-out infinite;
+  animation-delay: calc(var(--random-delay, 0) * -1s);
+  mix-blend-mode: screen;
+}
+
 /* Left grass clump */
 .blade::before {
   content: '';
@@ -57,5 +78,17 @@
   }
   100% {
     transform: rotate(calc(var(--wind-direction, 0) * -2deg * var(--wind-intensity, 0)));
+  }
+}
+
+@keyframes flowerSway {
+  0% {
+    transform: translateX(-50%) rotate(calc(var(--wind-direction, 0) * -5deg * var(--wind-intensity, 0)));
+  }
+  50% {
+    transform: translateX(-50%) rotate(calc(var(--wind-direction, 0) * 10deg * var(--wind-intensity, 0)));
+  }
+  100% {
+    transform: translateX(-50%) rotate(calc(var(--wind-direction, 0) * -5deg * var(--wind-intensity, 0)));
   }
 }

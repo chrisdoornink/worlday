@@ -12,9 +12,20 @@ const seededRandom = (seed: number) => {
   return x - Math.floor(x);
 };
 
-const GrassBlade: React.FC<{ x: number; y: number; height: number; delay: number }> = React.memo(
-  ({ x, y, height, delay }) => {
+// Array of flower colors
+const flowerColors = [
+  '#00ff9f', // neon mint
+  '#ff00ff', // electric magenta
+  '#7b00ff', // psychedelic purple
+  '#00ffff', // cyan
+  '#39ff14', // neon green
+];
+
+const GrassBlade: React.FC<{ x: number; y: number; height: number; delay: number; seed: number }> = React.memo(
+  ({ x, y, height, delay, seed }) => {
     const { wind } = useWind();
+    const hasFlower = seededRandom(seed + 100) < 0.1; // 10% chance of flower
+    const flowerColor = flowerColors[Math.floor(seededRandom(seed + 200) * flowerColors.length)];
     
     return (
       <div
@@ -27,7 +38,16 @@ const GrassBlade: React.FC<{ x: number; y: number; height: number; delay: number
           '--wind-direction': wind.direction,
           '--random-delay': delay,
         } as React.CSSProperties}
-      />
+      >
+        {hasFlower && (
+          <div 
+            className={styles.flower}
+            style={{
+              '--flower-color': flowerColor,
+            } as React.CSSProperties}
+          />
+        )}
+      </div>
     );
   }
 );
@@ -44,11 +64,10 @@ export const Grass: React.FC<GrassProps> = React.memo(({ timestamp, count = 100 
         y: 4 + seededRandom(seed + 1) * 14, // between 4% and 18% from bottom
         height: 15 + seededRandom(seed + 2) * 15, // between 15px and 30px
         delay: seededRandom(seed + 3) * 2, // random delay between 0-2s
+        seed,
       };
     });
   }, [timestamp, count]);
-
-  console.log('blades', blades);
 
   return (
     <>
@@ -59,6 +78,7 @@ export const Grass: React.FC<GrassProps> = React.memo(({ timestamp, count = 100 
           y={blade.y}
           height={blade.height}
           delay={blade.delay}
+          seed={blade.seed}
         />
       ))}
     </>
