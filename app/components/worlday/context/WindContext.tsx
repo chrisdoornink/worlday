@@ -22,29 +22,34 @@ export const useWind = () => {
 };
 
 export const WindProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [wind, setWind] = useState<WindState>({ intensity: 0, direction: 0 });
+  const [wind, setWind] = useState<WindState>({ intensity: 0.3, direction: 0 });
 
   useEffect(() => {
     const updateWind = () => {
-      const newWind = {
-        intensity: 0.3 + Math.random() * 0.7, // wind is always at least light
-        direction: -1 + Math.random() * 2,
-      };
-      console.log('Updating wind to:', newWind);
-      setWind(newWind);
+      // Maximum amount wind can change per update
+      const maxIntensityChange = 0.2;  
+      const maxDirectionChange = 0.3;
+
+      // Generate random changes within limits
+      const intensityChange = (Math.random() * 2 - 1) * maxIntensityChange;
+      const directionChange = (Math.random() * 2 - 1) * maxDirectionChange;
+
+      // Calculate new values with bounds checking
+      setWind((prevWind) => {
+        const newWind = {
+          intensity: Math.max(0.1, Math.min(1, prevWind.intensity + intensityChange)), 
+          direction: Math.max(-1, Math.min(1, prevWind.direction + directionChange)),
+        };
+        console.log(`Wind updated - Direction: ${newWind.direction.toFixed(2)}, Intensity: ${newWind.intensity.toFixed(2)}`);
+        return newWind;
+      });
     };
 
-    // Initial wind
-    // console.log('Initializing wind');
-    updateWind();
-
-    // Update wind every 4-8 seconds
-    const interval = setInterval(() => {
-      updateWind();
-    }, 4000 + Math.random() * 4000);
+    // Update wind more frequently but with smaller changes
+    const interval = setInterval(updateWind, 2000 + Math.random() * 2000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, []); 
 
   return (
     <WindContext.Provider value={{ wind }}>
