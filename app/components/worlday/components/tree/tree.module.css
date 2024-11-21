@@ -107,10 +107,10 @@
 /* Tree swaying animation */
 @keyframes treeSway {
   0%, 100% {
-    transform: rotate(calc(var(--wind-direction) * -2deg * var(--wind-intensity)));
+    transform: rotate(calc(var(--wind-direction) * -1deg * var(--wind-intensity)));
   }
   50% {
-    transform: rotate(calc(var(--wind-direction) * 4deg * var(--wind-intensity)));
+    transform: rotate(calc(var(--wind-direction) * 2deg * var(--wind-intensity)));
   }
 }
 
@@ -118,10 +118,10 @@
 @keyframes branchSway {
   0%, 100% {
     transform: translateX(-50%) 
-      rotate(calc(var(--branch-angle) + var(--wind-direction) * -3deg * var(--wind-intensity)));
+      rotate(calc(var(--branch-angle) + var(--wind-direction) * -2deg * var(--wind-intensity)));
   }
   50% {
     transform: translateX(-50%)
-      rotate(calc(var(--branch-angle) + var(--wind-direction) * 6deg * var(--wind-intensity)));
+      rotate(calc(var(--branch-angle) + var(--wind-direction) * 2deg * var(--wind-intensity)));
   }
 }
