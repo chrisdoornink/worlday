@@ -15,7 +15,7 @@ const LANDSCAPE = {
 // Calculate the effective horizon height including mountains
 const EFFECTIVE_HORIZON = LANDSCAPE.GROUND_HEIGHT + (LANDSCAPE.MOUNTAIN_HEIGHT * LANDSCAPE.PEAK_HEIGHT_RATIO);
 
-export const useHorizonAwareCelestial = () => {
+export const useDayNightCycle = () => {
   const [timeOfDay, setTimeOfDay] = useState<TimeOfDay>('morning');
 
   const getTimeOfDay = (): TimeOfDay => {

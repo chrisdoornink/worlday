@@ -1,5 +1,6 @@
 import React from 'react';
 import { useWind } from '../../context/WindContext';
+import { useDayNightCycle } from '../../hooks/useHorizonAwareCelestial';
 import styles from './tree.module.css';
 
 const seededRandom = (seed: number) => {
@@ -19,6 +20,7 @@ interface TreeProps {
 const TreeComponent: React.FC<TreeProps> = React.memo(
   ({ x, y, height, delay, seed }) => {
     const { wind } = useWind();
+    const { isNightTime } = useDayNightCycle();
     const scaleFactor = 0.3 + (1 - (y / 25)) * 0.7; // Trees get smaller in distance
     const branchCount = 2 + Math.floor(seededRandom(seed + 1) * 8); // 2-9 branches
     const zIndex = Math.round(2000 - ((y - 4) / 21) * 1000);
@@ -27,10 +29,10 @@ const TreeComponent: React.FC<TreeProps> = React.memo(
     const branches = React.useMemo(() => {
       return Array.from({ length: branchCount }, (_, i) => {
         const branchSeed = seed + i + 100;
-        const angle = -60 + seededRandom(branchSeed) * 120; // -60 to 60 degrees
+        const angle = -40 + seededRandom(branchSeed) * 80; // -40 to 40 degrees
         const length = (30 + seededRandom(branchSeed + 1) * 20); // 30-50% of parent length
         const thickness = 40 + seededRandom(branchSeed + 2) * 60; // 40-100% of parent thickness
-        const heightPosition = 20 + seededRandom(branchSeed + 3) * 60; // 20-80% up the trunk
+        const heightPosition = 20 + seededRandom(branchSeed + 3) * 40; // 20-60% up the trunk
         
         return {
           angle,
@@ -55,33 +57,46 @@ const TreeComponent: React.FC<TreeProps> = React.memo(
           '--scale-factor': scaleFactor,
         } as React.CSSProperties}
       >
-        <div
-          className={styles.trunk}
-        >
-          <div className={`${styles.foliage} ${styles.foliage1} ${styles.trunkFoliage}`} />
-          <div className={`${styles.foliage} ${styles.foliage2} ${styles.trunkFoliage}`} />
-          <div className={`${styles.foliage} ${styles.foliage3} ${styles.trunkFoliage}`} />
-          <div className={`${styles.foliageGlow} ${styles.trunkFoliage}`} />
-          <div className={`${styles.foliageGlow} ${styles.foliageGlow2} ${styles.trunkFoliage}`} />
-        </div>
-        {branches.map((branch, index) => (
-          <div
-            key={index}
-            className={styles.branch}
-            style={{
-              '--branch-angle': `${branch.angle}deg`,
-              '--branch-length': `${branch.length}`,
-              '--branch-thickness': `${branch.thickness}`,
-              '--branch-height': `${branch.heightPosition}%`,
-              zIndex,
-            } as React.CSSProperties}
-          >
+        <div className={styles.trunk} />
+        {isNightTime && (
+          <div className={`${styles.trunkFoliage}`}>
             <div className={`${styles.foliage} ${styles.foliage1}`} />
             <div className={`${styles.foliage} ${styles.foliage2}`} />
             <div className={`${styles.foliage} ${styles.foliage3}`} />
             <div className={styles.foliageGlow} />
             <div className={`${styles.foliageGlow} ${styles.foliageGlow2}`} />
           </div>
+        )}
+        {branches.map((branch, index) => (
+          <React.Fragment key={index}>
+            <div
+              className={styles.branch}
+              style={{
+                '--branch-angle': `${branch.angle}deg`,
+                '--branch-length': `${branch.length}`,
+                '--branch-thickness': `${branch.thickness}`,
+                '--branch-height': `${branch.heightPosition}%`,
+                zIndex,
+              } as React.CSSProperties}
+            />
+            {isNightTime && (
+              <div 
+                className={styles.branchFoliage}
+                style={{
+                  '--branch-angle': `${branch.angle}deg`,
+                  '--branch-length': `${branch.length}`,
+                  '--branch-thickness': `${branch.thickness}`,
+                  '--branch-height': `${branch.heightPosition}%`,
+                } as React.CSSProperties}
+              >
+                <div className={`${styles.foliage} ${styles.foliage1}`} />
+                <div className={`${styles.foliage} ${styles.foliage2}`} />
+                <div className={`${styles.foliage} ${styles.foliage3}`} />
+                <div className={styles.foliageGlow} />
+                <div className={`${styles.foliageGlow} ${styles.foliageGlow2}`} />
+              </div>
+            )}
+          </React.Fragment>
         ))}
       </div>
     );

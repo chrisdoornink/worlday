@@ -3,14 +3,14 @@
 import { useBirds } from './useBirds';
 import { useStars } from './useStars';
 import { useWeather } from './useWeather';
-import { useHorizonAwareCelestial } from './useHorizonAwareCelestial';
+import { useDayNightCycle } from './useHorizonAwareCelestial';
 import { useCrickets } from './useCrickets';
 
 export const useBackground = () => {
   const { clouds, weatherParticles, weather } = useWeather();
   const birds = useBirds(weather);
   const stars = useStars();
-  const { timeOfDay, isNightTime, celestialPosition } = useHorizonAwareCelestial();
+  const { timeOfDay, isNightTime, celestialPosition } = useDayNightCycle();
   const { crickets, setCrickets } = useCrickets();
 
   return {
@@ -26,4 +26,3 @@ export const useBackground = () => {
     celestialPosition,
   };
 };
-
