@@ -13,6 +13,7 @@ import { Cricket } from './components/cricket';
 import RandomMountains from './components/mountains/RandomMountains';
 import { Grass } from './components/grass/Grass';
 import { Trees } from './components/tree/Tree';
+import { CelestialBody } from './components/celestial/CelestialBody';
 
 export default function World() {
   const {
@@ -39,14 +40,10 @@ export default function World() {
         )}
         
         {/* Celestial body (sun or moon) */}
-        <div
-          className={`${celestialStyles.celestialBody} ${
-            isNightTime ? celestialStyles.moon : celestialStyles.sun
-          } ${weather !== 'clear' ? celestialStyles.sunDim : ''}`}
-          style={{
-            left: celestialPosition.x,
-            top: celestialPosition.y,
-          }}
+        <CelestialBody
+          isNightTime={isNightTime}
+          position={celestialPosition}
+          weather={weather}
         />
 
         {/* Crows - only show in clear weather */}
