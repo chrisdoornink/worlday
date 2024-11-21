@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useZoom } from '@/app/context/ZoomContext';
+import { getScaledValue } from '@/app/constants/scaling';
 import celestialStyles from '../../styles/celestial.module.css';
 
 interface CelestialBodyProps {
@@ -12,11 +13,12 @@ interface CelestialBodyProps {
 
 export function CelestialBody({ isNightTime, position, weather }: CelestialBodyProps) {
   const { scale } = useZoom();
+  const celestialScale = getScaledValue(scale, 'CELESTIAL');
   
   const style = {
     left: position.x,
     top: position.y,
-    transform: `scale(${scale})`,
+    transform: `scale(${celestialScale})`,
     transformOrigin: 'center center'
   };
 

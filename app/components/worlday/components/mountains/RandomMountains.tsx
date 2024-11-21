@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import styles from './styles.module.css';
 import { useZoom } from '@/app/context/ZoomContext';
+import { getScaledValue } from '@/app/constants/scaling';
+import styles from './styles.module.css';
 
 interface RandomMountainsProps {
   timestamp?: number; // Optional timestamp for randomization seed
@@ -10,7 +11,7 @@ interface RandomMountainsProps {
 
 const RandomMountains: React.FC<RandomMountainsProps> = ({ timestamp = Date.now() }) => {
   const { scale } = useZoom();
-  const mountainScale = 1 + (scale - 1) * 0.2; // Scale at 20% of the normal rate
+  const mountainScale = getScaledValue(scale, 'MOUNTAINS');
 
   // Generate a seeded random number between min and max
   const seededRandom = (min: number, max: number, seed: number) => {
@@ -24,14 +25,14 @@ const RandomMountains: React.FC<RandomMountainsProps> = ({ timestamp = Date.now(
     const points: string[] = [];
     points.push('0% 100%'); // Start at bottom left
 
-    // Generate 20 mountain peaks (similar to original)
+    // Generate 20 mountain peaks
     for (let i = 0; i < 20; i++) {
       const x = i * 5; // 5% intervals
-      const height = seededRandom(30, 90, timestamp + i); // Height between 30% and 90%
+      const height = seededRandom(30, 90, timestamp + i);
       points.push(`${x}% ${height}%`);
     }
 
-    points.push('100% 45%'); // Last peak (matching original)
+    points.push('100% 45%'); // Last peak
     points.push('100% 100%'); // End at bottom right
 
     return points.join(', ');
