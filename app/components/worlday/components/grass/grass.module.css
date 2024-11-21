@@ -7,7 +7,45 @@
   animation: sway 3s ease-in-out infinite;
   animation-delay: calc(var(--random-delay, 0) * -1s);
   pointer-events: none;
-  z-index: 2; /* Add z-index to appear above ground */
+  z-index: 2;
+}
+
+/* Left grass clump */
+.blade::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -3px;
+  width: 1px;
+  height: 10px;
+  background: linear-gradient(to top, #2d5a27, #3d7a37);
+  border-radius: 1px 1px 0 0;
+  transform: rotate(-15deg);
+  transform-origin: bottom center;
+  box-shadow: 
+    -1px 0 0 #2d5a27,
+    -2px 1px 0 #3d7a37,
+    2px 0 0 #2d5a27,
+    1px -1px 0 #3d7a37;
+}
+
+/* Right grass clump */
+.blade::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: -3px;
+  width: 1px;
+  height: 8px;
+  background: linear-gradient(to top, #2d5a27, #3d7a37);
+  border-radius: 1px 1px 0 0;
+  transform: rotate(20deg);
+  transform-origin: bottom center;
+  box-shadow: 
+    1px 0 0 #2d5a27,
+    2px -1px 0 #3d7a37,
+    -2px 0 0 #2d5a27,
+    -1px 1px 0 #3d7a37;
 }
 
 @keyframes sway {
