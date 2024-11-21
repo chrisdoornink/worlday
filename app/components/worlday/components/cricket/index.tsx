@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import styles from './styles.module.css';
 
 interface CricketProps {
@@ -8,22 +8,15 @@ interface CricketProps {
   style?: React.CSSProperties;
 }
 
-export const Cricket: React.FC<CricketProps> = ({ position: initialPosition, style }) => {
-  const [position, setPosition] = useState(initialPosition || { x: 0, y: 0 });
-  const [direction, setDirection] = useState<'left' | 'right'>('right');
+const Cricket: React.FC<CricketProps> = React.memo(({ position: initialPosition, style }) => {
+  const [position, setPosition] = useState(initialPosition || { 
+    x: Math.random() * 100, 
+    y: 8 + Math.random() * 6
+  });
+  const [direction, setDirection] = useState<'left' | 'right'>(Math.random() > 0.5 ? 'right' : 'left');
   const [isHopping, setIsHopping] = useState(false);
   const [isMoving, setIsMoving] = useState(false);
   const cricketRef = useRef<HTMLDivElement>(null);
-
-  // Initialize random starting position if not provided
-  useEffect(() => {
-    if (!initialPosition) {
-      const randomX = Math.random() * 100; // Random percentage across viewport width
-      const randomY = 8 + Math.random() * 6; // 8-14% from bottom
-      setPosition({ x: randomX, y: randomY });
-    }
-    setDirection(Math.random() > 0.5 ? 'right' : 'left');
-  }, [initialPosition]);
 
   // Handle crawling movement with pauses
   useEffect(() => {
@@ -100,4 +93,8 @@ export const Cricket: React.FC<CricketProps> = ({ position: initialPosition, sty
       }}
     />
   );
-};
+});
+
+Cricket.displayName = 'Cricket';
+
+export { Cricket };
