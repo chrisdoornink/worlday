@@ -49,33 +49,37 @@ export default function World() {
           }}
         />
 
-        {/* Crows */}
-        <Crow 
-          style={{ 
-            left: '45%',
-            animationDelay: '0s',
-            animationDuration: '20s'
-          }}
-          flapDelay={0}
-        />
-        <Crow 
-          style={{ 
-            left: '55%',
-            top: '28%',
-            animationDelay: '-2s',
-            animationDuration: '22s'
-          }}
-          flapDelay={0.2}
-        />
-        <Crow 
-          style={{ 
-            left: '48%',
-            top: '32%',
-            animationDelay: '-4s',
-            animationDuration: '21s'
-          }}
-          flapDelay={0.1}
-        />
+        {/* Crows - only show in clear weather */}
+        {weather === 'clear' && (
+          <>
+            <Crow 
+              style={{ 
+                left: '45%',
+                animationDelay: '0s',
+                animationDuration: '20s'
+              }}
+              flapDelay={0}
+            />
+            <Crow 
+              style={{ 
+                left: '55%',
+                top: '28%',
+                animationDelay: '-2s',
+                animationDuration: '22s'
+              }}
+              flapDelay={0.2}
+            />
+            <Crow 
+              style={{ 
+                left: '48%',
+                top: '32%',
+                animationDelay: '-4s',
+                animationDuration: '21s'
+              }}
+              flapDelay={0.1}
+            />
+          </>
+        )}
 
         {/* Birds */}
         {birds.map((bird) => (
