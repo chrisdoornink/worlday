@@ -6,9 +6,10 @@ import styles from './styles.module.css';
 interface CricketProps {
   position?: { x: number; y: number };
   style?: React.CSSProperties;
+  onRemove?: () => void;
 }
 
-const Cricket: React.FC<CricketProps> = React.memo(({ position: initialPosition, style }) => {
+const Cricket: React.FC<CricketProps> = React.memo(({ position: initialPosition, style, onRemove }) => {
   const [position, setPosition] = useState(initialPosition || { 
     x: Math.random() * 100, 
     y: 8 + Math.random() * 6
@@ -16,11 +17,52 @@ const Cricket: React.FC<CricketProps> = React.memo(({ position: initialPosition,
   const [direction, setDirection] = useState<'left' | 'right'>(Math.random() > 0.5 ? 'right' : 'left');
   const [isHopping, setIsHopping] = useState(false);
   const [isMoving, setIsMoving] = useState(false);
+  const [isFlyingAway, setIsFlyingAway] = useState(false);
+  const [opacity, setOpacity] = useState(1);
   const cricketRef = useRef<HTMLDivElement>(null);
+  const flyAwayRef = useRef<{
+    startTime: number;
+    animationFrame: number | null;
+  }>({ startTime: 0, animationFrame: null });
+
+  const flyAway = useCallback(() => {
+    if (isFlyingAway) return;
+    setIsFlyingAway(true);
+    flyAwayRef.current.startTime = Date.now();
+
+    const animate = () => {
+      const elapsed = (Date.now() - flyAwayRef.current.startTime) / 1000; // seconds
+      const duration = 2; // animation duration in seconds
+      
+      if (elapsed >= duration) {
+        if (flyAwayRef.current.animationFrame) {
+          cancelAnimationFrame(flyAwayRef.current.animationFrame);
+        }
+        onRemove?.();
+        return;
+      }
+
+      const progress = elapsed / duration;
+      const newOpacity = 1 - progress;
+      const amplitude = 20; // pixels
+      const frequency = 3; // number of waves
+      
+      // Sine wave movement + upward motion
+      const newX = position.x + Math.sin(progress * Math.PI * frequency) * amplitude;
+      const newY = position.y + (progress * 100); // Move upward
+      
+      setPosition({ x: newX, y: newY });
+      setOpacity(newOpacity);
+      
+      flyAwayRef.current.animationFrame = requestAnimationFrame(animate);
+    };
+
+    flyAwayRef.current.animationFrame = requestAnimationFrame(animate);
+  }, [isFlyingAway, position.x, position.y, onRemove]);
 
   // Handle crawling movement with pauses
   useEffect(() => {
-    if (isHopping) return;
+    if (isHopping || isFlyingAway) return;
 
     const startMoving = () => {
       if (Math.random() < 0.3) { // 30% chance to start moving
@@ -54,7 +96,7 @@ const Cricket: React.FC<CricketProps> = React.memo(({ position: initialPosition,
       clearInterval(moveInterval);
       clearInterval(crawlInterval);
     };
-  }, [direction, isHopping, isMoving]);
+  }, [direction, isHopping, isFlyingAway, isMoving]);
 
   // Random hopping behavior
   useEffect(() => {
@@ -73,13 +115,13 @@ const Cricket: React.FC<CricketProps> = React.memo(({ position: initialPosition,
     };
 
     const hopInterval = setInterval(() => {
-      if (Math.random() < 0.3 && !isHopping) { // 30% chance to hop when interval triggers
+      if (Math.random() < 0.3 && !isHopping && !isFlyingAway) { // 30% chance to hop when interval triggers
         startHop();
       }
     }, 20000 + Math.random() * 40000); // Random interval between 20-60 seconds
 
     return () => clearInterval(hopInterval);
-  }, []);
+  }, [isFlyingAway, isHopping]);
 
   return (
     <div
@@ -89,8 +131,11 @@ const Cricket: React.FC<CricketProps> = React.memo(({ position: initialPosition,
         ...style,
         left: `${position.x}%`,
         bottom: `${position.y}vh`,
-        transform: `scaleX(${direction === 'left' ? -1 : 1})`
+        transform: `scaleX(${direction === 'left' ? -1 : 1})`,
+        opacity,
+        pointerEvents: isFlyingAway ? 'none' : 'auto'
       }}
+      onClick={flyAway}
     />
   );
 });

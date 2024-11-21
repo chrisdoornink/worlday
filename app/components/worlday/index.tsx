@@ -26,6 +26,7 @@ export default function World() {
     weather,
     isNightTime,
     celestialPosition,
+    setCrickets,
   } = useBackground();
 
   const landscapeTimestamp = React.useMemo(() => Date.now(), []);
@@ -157,6 +158,9 @@ export default function World() {
           <Cricket
             key={cricket.key}
             position={{ x: cricket.x, y: cricket.y }}
+            onRemove={() => {
+              setCrickets(prev => prev.filter(c => c.key !== cricket.key));
+            }}
           />
         ))}
       </div>
