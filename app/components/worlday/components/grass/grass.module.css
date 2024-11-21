@@ -7,7 +7,6 @@
   animation: sway 3s ease-in-out infinite;
   animation-delay: calc(var(--random-delay, 0) * -1s);
   pointer-events: none;
-  z-index: 2;
 }
 
 /* Flower styles */

@@ -27,6 +27,10 @@ const GrassBlade: React.FC<{ x: number; y: number; height: number; delay: number
     const hasFlower = seededRandom(seed + 100) < 0.1; // 10% chance of flower
     const flowerColor = flowerColors[Math.floor(seededRandom(seed + 200) * flowerColors.length)];
     
+    // Calculate z-index inversely based on y position (4-18 range)
+    // Convert to 2000-1000 range (higher y = lower z-index)
+    const zIndex = Math.round(2000 - ((y - 4) / 14) * 1000);
+    
     return (
       <div
         className={styles.blade}
@@ -37,6 +41,7 @@ const GrassBlade: React.FC<{ x: number; y: number; height: number; delay: number
           '--wind-intensity': wind.intensity,
           '--wind-direction': wind.direction,
           '--random-delay': delay,
+          zIndex,
         } as React.CSSProperties}
       >
         {hasFlower && (
