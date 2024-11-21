@@ -1,0 +1,64 @@
+.tree {
+  position: absolute;
+  width: calc(8px * var(--scale-factor));
+  transform-origin: bottom center;
+  animation: treeSway 4s ease-in-out infinite;
+  animation-delay: calc(var(--random-delay) * -1s);
+  pointer-events: none;
+}
+
+.trunk {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, 
+    #2d2d2d,
+    #4a4a4a 60%,
+    #2d2d2d
+  );
+  border-radius: calc(1px * var(--scale-factor));
+  transform-origin: bottom center;
+}
+
+.branch {
+  position: absolute;
+  bottom: var(--branch-height);
+  left: 50%;
+  width: calc(8px * var(--scale-factor) * var(--branch-thickness) / 100);
+  height: calc(var(--branch-length) * 1%);
+  background: linear-gradient(to top,
+    #2d2d2d,
+    #4a4a4a 40%,
+    #2d2d2d
+  );
+  transform-origin: bottom center;
+  transform: translateX(-50%) rotate(var(--branch-angle));
+  border-radius: calc(1px * var(--scale-factor));
+  animation: branchSway 3s ease-in-out infinite;
+  animation-delay: calc((var(--random-delay) + var(--branch-height) * 0.0002) * -1s);
+}
+
+/* Tree swaying animation */
+@keyframes treeSway {
+  0%, 100% {
+    transform: rotate(calc(var(--wind-direction) * -2deg * var(--wind-intensity)));
+  }
+  50% {
+    transform: rotate(calc(var(--wind-direction) * 4deg * var(--wind-intensity)));
+  }
+}
+
+/* Branch swaying animation */
+@keyframes branchSway {
+  0%, 100% {
+    transform: translateX(-50%) 
+      rotate(calc(var(--branch-angle) + var(--wind-direction) * -3deg * var(--wind-intensity)));
+  }
+  50% {
+    transform: translateX(-50%)
+      rotate(calc(var(--branch-angle) + var(--wind-direction) * 6deg * var(--wind-intensity)));
+  }
+}

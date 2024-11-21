@@ -11,9 +11,8 @@ import { useBackground } from './hooks/useBackground';
 import { Crow } from './components/crow';
 import { Cricket } from './components/cricket';
 import RandomMountains from './components/mountains/RandomMountains';
-import { Plants } from './components/plants/Plants';
-
 import { Grass } from './components/grass/Grass';
+import { Trees } from './components/tree/Tree';
 
 export default function World() {
   const {
@@ -150,6 +149,7 @@ export default function World() {
         {/* Landscape */}
         <div className={landscapeStyles.horizon} />
         <RandomMountains timestamp={landscapeTimestamp} />
+        <Trees timestamp={landscapeTimestamp} count={20} />
         <Grass timestamp={landscapeTimestamp} count={200} />
         <div className={`${landscapeStyles.ground} ${landscapeStyles[`ground${timeOfDay.charAt(0).toUpperCase() + timeOfDay.slice(1)}`]}`} />
 
