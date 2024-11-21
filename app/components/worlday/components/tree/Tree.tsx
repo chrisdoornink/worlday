@@ -28,7 +28,7 @@ const TreeComponent: React.FC<TreeProps> = React.memo(
       return Array.from({ length: branchCount }, (_, i) => {
         const branchSeed = seed + i + 100;
         const angle = -60 + seededRandom(branchSeed) * 120; // -60 to 60 degrees
-        const length = 30 + seededRandom(branchSeed + 1) * 70; // 30-100% of parent length
+        const length = (30 + seededRandom(branchSeed + 1) * 20); // 30-50% of parent length
         const thickness = 40 + seededRandom(branchSeed + 2) * 60; // 40-100% of parent thickness
         const heightPosition = 20 + seededRandom(branchSeed + 3) * 60; // 20-80% up the trunk
         
