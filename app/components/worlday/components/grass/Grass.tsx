@@ -3,28 +3,39 @@
 import React from 'react';
 import { useWind } from '../../context/WindContext';
 import { useZoom } from '@/app/context/ZoomContext';
+import { getScaledValue } from '@/app/constants/scaling';
 import styles from './grass.module.css';
+
+// Array of flower colors
+const flowerColors = [
+  '#FFB7C5', // pink
+  '#87CEEB', // sky blue
+  '#98FB98', // pale green
+  '#DDA0DD', // plum
+  '#F0E68C', // khaki
+  '#E6E6FA', // lavender
+];
+
+// Helper function to generate seeded random numbers
+const seededRandom = (seed: number) => {
+  const x = Math.sin(seed++) * 10000;
+  return x - Math.floor(x);
+};
+
+interface GrassBladeProps {
+  x: number;
+  y: number;
+  height: number;
+  delay: number;
+  seed: number;
+}
 
 interface GrassProps {
   timestamp: number;
   count?: number;
 }
 
-const seededRandom = (seed: number) => {
-  const x = Math.sin(seed++) * 10000;
-  return x - Math.floor(x);
-};
-
-// Array of flower colors
-const flowerColors = [
-  '#00ff9f', // neon mint
-  '#ff00ff', // electric magenta
-  '#7b00ff', // psychedelic purple
-  '#00ffff', // cyan
-  '#39ff14', // neon green
-];
-
-const GrassBlade: React.FC<{ x: number; y: number; height: number; delay: number; seed: number }> = React.memo(
+const GrassBlade: React.FC<GrassBladeProps> = React.memo(
   ({ x, y, height, delay, seed }) => {
     const { wind } = useWind();
     const { scale } = useZoom();
@@ -32,7 +43,8 @@ const GrassBlade: React.FC<{ x: number; y: number; height: number; delay: number
     const hasFlower = seededRandom(seed + 100) < 0.1;
     const flowerColor = flowerColors[Math.floor(seededRandom(seed + 200) * flowerColors.length)];
     const zIndex = Math.round(2000 - ((y - 4) / 21) * 1000);
-    const scaleFactor = (0.2 + (1 - ((y - 4) / 21)) * 0.8) * scale;
+    const baseScaleFactor = 0.2 + (1 - ((y - 4) / 21)) * 0.8;
+    const scaleFactor = baseScaleFactor * getScaledValue(scale, 'GRASS');
 
     return (
       <div
@@ -40,7 +52,7 @@ const GrassBlade: React.FC<{ x: number; y: number; height: number; delay: number
         style={{
           left: `${x}%`,
           bottom: `${y}%`,
-          height: `${height * scale}px`,
+          height: `${height * getScaledValue(scale, 'GRASS')}px`,
           '--wind-intensity': wind.intensity,
           '--wind-direction': wind.direction,
           '--random-delay': delay,
@@ -76,7 +88,7 @@ const GrassBlade: React.FC<{ x: number; y: number; height: number; delay: number
 
 GrassBlade.displayName = 'GrassBlade';
 
-export const Grass: React.FC<GrassProps> = React.memo(({ timestamp, count = 1000 }) => {
+export const Grass: React.FC<GrassProps> = React.memo(({ timestamp, count = 200 }) => {
   const blades = React.useMemo(() => {
     return Array.from({ length: count }, (_, i) => {
       const seed = timestamp + i;
@@ -96,7 +108,6 @@ export const Grass: React.FC<GrassProps> = React.memo(({ timestamp, count = 1000
     });
   }, [timestamp, count]);
 
-  // console.log('blades length', blades.length);
   return (
     <>
       {blades.map(blade => (
