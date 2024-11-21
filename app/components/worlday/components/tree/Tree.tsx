@@ -55,7 +55,15 @@ const TreeComponent: React.FC<TreeProps> = React.memo(
           '--scale-factor': scaleFactor,
         } as React.CSSProperties}
       >
-        <div className={styles.trunk} />
+        <div
+          className={styles.trunk}
+        >
+          <div className={`${styles.foliage} ${styles.foliage1} ${styles.trunkFoliage}`} />
+          <div className={`${styles.foliage} ${styles.foliage2} ${styles.trunkFoliage}`} />
+          <div className={`${styles.foliage} ${styles.foliage3} ${styles.trunkFoliage}`} />
+          <div className={`${styles.foliageGlow} ${styles.trunkFoliage}`} />
+          <div className={`${styles.foliageGlow} ${styles.foliageGlow2} ${styles.trunkFoliage}`} />
+        </div>
         {branches.map((branch, index) => (
           <div
             key={index}
@@ -67,7 +75,13 @@ const TreeComponent: React.FC<TreeProps> = React.memo(
               '--branch-height': `${branch.heightPosition}%`,
               zIndex,
             } as React.CSSProperties}
-          />
+          >
+            <div className={`${styles.foliage} ${styles.foliage1}`} />
+            <div className={`${styles.foliage} ${styles.foliage2}`} />
+            <div className={`${styles.foliage} ${styles.foliage3}`} />
+            <div className={styles.foliageGlow} />
+            <div className={`${styles.foliageGlow} ${styles.foliageGlow2}`} />
+          </div>
         ))}
       </div>
     );
