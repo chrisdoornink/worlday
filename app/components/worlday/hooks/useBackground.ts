@@ -11,10 +11,11 @@ export const useBackground = () => {
   const birds = useBirds(weather);
   const stars = useStars();
   const { timeOfDay, isNightTime, celestialPosition } = useHorizonAwareCelestial();
-  const crickets = useCrickets()
+  const { crickets, setCrickets } = useCrickets();
 
   return {
     crickets,
+    setCrickets,
     clouds,
     birds,
     stars,

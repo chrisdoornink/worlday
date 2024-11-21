@@ -34,5 +34,5 @@ export const useCrickets = () => {
     return () => clearInterval(interval);
   }, []);
 
-  return crickets;
+  return { crickets, setCrickets };
 };
