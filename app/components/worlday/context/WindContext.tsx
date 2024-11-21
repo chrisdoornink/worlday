@@ -1,3 +1,5 @@
+"use client";
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface WindState {
@@ -24,13 +26,16 @@ export const WindProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     const updateWind = () => {
-      setWind({
+      const newWind = {
         intensity: 0.3 + Math.random() * 0.7, // wind is always at least light
         direction: -1 + Math.random() * 2,
-      });
+      };
+      console.log('Updating wind to:', newWind);
+      setWind(newWind);
     };
 
     // Initial wind
+    console.log('Initializing wind');
     updateWind();
 
     // Update wind every 4-8 seconds

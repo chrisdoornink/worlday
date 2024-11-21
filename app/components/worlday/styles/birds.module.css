@@ -2,9 +2,17 @@
 .birdWrapper {
     position: absolute;
     animation: fly linear infinite;
-  }
+}
+
+.floatWrapper {
+    position: relative;
+    animation: float ease-in-out infinite;
+    /* Debug outline */
+    /* outline: 1px solid red; */
+    /* min-height: 30px; */
+}
   
-  .bird {
+.bird {
     width: 8px;
     height: 4px;
     background: black;
@@ -13,26 +21,35 @@
     transform-style: preserve-3d;
     perspective: 1000px;
     animation: flap 0.4s ease-in-out infinite;
-  }
+}
   
-  .nightBird {
+.nightBird {
     opacity: 0.3;
-  }
+}
   
-  @keyframes flap {
+@keyframes flap {
     0%, 100% {
-      transform: rotateX(60deg);
+        transform: rotateX(60deg);
     }
     50% {
-      transform: rotateX(-60deg);
+        transform: rotateX(-60deg);
     }
-  }
+}
   
-  @keyframes fly {
+@keyframes fly {
     from {
-      transform: translateX(-120vw) translateY(var(--fly-y, 0)) scale(var(--bird-scale, 1));
+        transform: translateX(-120vw) scale(var(--bird-scale, 1));
     }
     to {
-      transform: translateX(120vw) translateY(var(--fly-y, 0)) scale(var(--bird-scale, 1));
+        transform: translateX(120vw) scale(var(--bird-scale, 1));
     }
-  }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(calc(var(--wind-intensity, 0.5) * var(--float-range, 10px)));
+    }
+}

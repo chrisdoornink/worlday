@@ -1,5 +1,6 @@
 import World from "./components/worlday";
+import { WindProvider } from "./components/worlday/context/WindContext";
 
 export default function Home() {
-  return <World />;
+  return <WindProvider><World /></WindProvider>;
 }

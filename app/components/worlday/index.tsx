@@ -12,7 +12,7 @@ import { Crow } from './components/crow';
 import { Cricket } from './components/cricket';
 import RandomMountains from './components/mountains/RandomMountains';
 import { Plants } from './components/plants/Plants';
-import { WindProvider } from './context/WindContext';
+
 import { Grass } from './components/grass/Grass';
 
 export default function World() {
@@ -31,7 +31,7 @@ export default function World() {
   const landscapeTimestamp = React.useMemo(() => Date.now(), []);
 
   return (
-    <WindProvider>
+    
       <div className={`${worldStyles.worldContainer} ${worldStyles[timeOfDay]}`}>
         {/* Background cloud for rain and snow */}
         {(weather === 'rain' || weather === 'snow') && (
@@ -85,9 +85,14 @@ export default function World() {
             style={bird.style}
           >
             <div 
-              className={`${birdStyles.bird} ${isNightTime ? birdStyles.nightBird : ''}`}
-              style={bird.flapStyle}
-            />
+              className={birdStyles.floatWrapper}
+              style={bird.floatStyle}
+            >
+              <div
+                className={`${birdStyles.bird} ${isNightTime ? birdStyles.nightBird : ''}`}
+                style={bird.flapStyle}
+              />
+            </div>
           </div>
         ))}
 
@@ -151,6 +156,5 @@ export default function World() {
           />
         ))}
       </div>
-    </WindProvider>
   );
 };
