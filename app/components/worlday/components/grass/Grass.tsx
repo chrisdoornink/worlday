@@ -1,5 +1,8 @@
+'use client';
+
 import React from 'react';
 import { useWind } from '../../context/WindContext';
+import { useZoom } from '@/app/context/ZoomContext';
 import styles from './grass.module.css';
 
 interface GrassProps {
@@ -24,11 +27,12 @@ const flowerColors = [
 const GrassBlade: React.FC<{ x: number; y: number; height: number; delay: number; seed: number }> = React.memo(
   ({ x, y, height, delay, seed }) => {
     const { wind } = useWind();
+    const { scale } = useZoom();
     
     const hasFlower = seededRandom(seed + 100) < 0.1;
     const flowerColor = flowerColors[Math.floor(seededRandom(seed + 200) * flowerColors.length)];
     const zIndex = Math.round(2000 - ((y - 4) / 21) * 1000);
-    const scaleFactor = 0.2 + (1 - ((y - 4) / 21)) * 0.8;
+    const scaleFactor = (0.2 + (1 - ((y - 4) / 21)) * 0.8) * scale;
 
     return (
       <div
@@ -36,12 +40,13 @@ const GrassBlade: React.FC<{ x: number; y: number; height: number; delay: number
         style={{
           left: `${x}%`,
           bottom: `${y}%`,
-          height: `${height}px`,
+          height: `${height * scale}px`,
           '--wind-intensity': wind.intensity,
           '--wind-direction': wind.direction,
           '--random-delay': delay,
           '--scale-factor': scaleFactor,
           zIndex,
+          transformOrigin: 'bottom center'
         } as React.CSSProperties}
       >
         <div className={styles.segment1} />
