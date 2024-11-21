@@ -27,9 +27,11 @@ const GrassBlade: React.FC<{ x: number; y: number; height: number; delay: number
     const hasFlower = seededRandom(seed + 100) < 0.1; // 10% chance of flower
     const flowerColor = flowerColors[Math.floor(seededRandom(seed + 200) * flowerColors.length)];
     
-    // Calculate z-index inversely based on y position (4-18 range)
-    // Convert to 2000-1000 range (higher y = lower z-index)
-    const zIndex = Math.round(2000 - ((y - 4) / 14) * 1000);
+    // Calculate z-index inversely based on y position (4-25 range)
+    const zIndex = Math.round(2000 - ((y - 4) / 21) * 1000);
+    
+    // Calculate scale factor based on vertical position
+    const scaleFactor = 0.2 + (1 - ((y - 4) / 21)) * 0.8; // 20% to 100%
     
     return (
       <div
@@ -41,6 +43,7 @@ const GrassBlade: React.FC<{ x: number; y: number; height: number; delay: number
           '--wind-intensity': wind.intensity,
           '--wind-direction': wind.direction,
           '--random-delay': delay,
+          '--scale-factor': scaleFactor,
           zIndex,
         } as React.CSSProperties}
       >
@@ -49,6 +52,7 @@ const GrassBlade: React.FC<{ x: number; y: number; height: number; delay: number
             className={styles.flower}
             style={{
               '--flower-color': flowerColor,
+              '--scale-factor': scaleFactor,
             } as React.CSSProperties}
           />
         )}
@@ -63,11 +67,17 @@ export const Grass: React.FC<GrassProps> = React.memo(({ timestamp, count = 100 
   const blades = React.useMemo(() => {
     return Array.from({ length: count }, (_, i) => {
       const seed = timestamp + i;
+      const y = 4 + seededRandom(seed + 1) * 21; // between 4% and 25% from bottom
+      // Scale height based on vertical position - taller at bottom, shorter at top
+      const baseHeight = 15 + seededRandom(seed + 2) * 15; // base height between 15-30px
+      const heightScale = 1 - ((y - 4) / 21); // 1 at bottom (4%), 0 at top (25%)
+      const height = baseHeight * (0.2 + heightScale * 0.8); // scale between 20% and 100% of base height
+      
       return {
         key: `blade-${i}`,
         x: seededRandom(seed) * 100,
-        y: 4 + seededRandom(seed + 1) * 14, // between 4% and 18% from bottom
-        height: 15 + seededRandom(seed + 2) * 15, // between 15px and 30px
+        y,
+        height,
         delay: seededRandom(seed + 3) * 2, // random delay between 0-2s
         seed,
       };
