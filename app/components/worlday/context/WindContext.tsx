@@ -35,7 +35,7 @@ export const WindProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     // Initial wind
-    console.log('Initializing wind');
+    // console.log('Initializing wind');
     updateWind();
 
     // Update wind every 4-8 seconds

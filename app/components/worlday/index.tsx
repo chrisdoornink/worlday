@@ -145,7 +145,7 @@ export default function World() {
         {/* Landscape */}
         <div className={landscapeStyles.horizon} />
         <RandomMountains timestamp={landscapeTimestamp} />
-        <Grass timestamp={landscapeTimestamp} count={150} />
+        <Grass timestamp={landscapeTimestamp} count={200} />
         <div className={`${landscapeStyles.ground} ${landscapeStyles[`ground${timeOfDay.charAt(0).toUpperCase() + timeOfDay.slice(1)}`]}`} />
 
         {/* Crickets */}

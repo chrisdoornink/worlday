@@ -43,7 +43,7 @@ export const useBirds = (weather: Weather) => {
     const floatRange = 2 + Math.random() * 4; // 2-6px float range
     const floatDuration = 2 + Math.random() * 2; // 2-4 second float cycle
     
-    console.log('Generating bird with wind:', wind);
+    // console.log('Generating bird with wind:', wind);
     return {
       key: Date.now() + index,
       style: {
@@ -67,7 +67,6 @@ export const useBirds = (weather: Weather) => {
 
   // Generate or update birds when wind changes
   useEffect(() => {
-    console.log('Wind state changed:', wind);
     if (weather === 'clear') {
       setBirds(prev => prev.map((bird, i) => {
         const groupSize = prev.length;

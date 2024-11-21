@@ -24,15 +24,12 @@ const flowerColors = [
 const GrassBlade: React.FC<{ x: number; y: number; height: number; delay: number; seed: number }> = React.memo(
   ({ x, y, height, delay, seed }) => {
     const { wind } = useWind();
-    const hasFlower = seededRandom(seed + 100) < 0.1; // 10% chance of flower
+    
+    const hasFlower = seededRandom(seed + 100) < 0.1;
     const flowerColor = flowerColors[Math.floor(seededRandom(seed + 200) * flowerColors.length)];
-    
-    // Calculate z-index inversely based on y position (4-25 range)
     const zIndex = Math.round(2000 - ((y - 4) / 21) * 1000);
-    
-    // Calculate scale factor based on vertical position
-    const scaleFactor = 0.2 + (1 - ((y - 4) / 21)) * 0.8; // 20% to 100%
-    
+    const scaleFactor = 0.2 + (1 - ((y - 4) / 21)) * 0.8;
+
     return (
       <div
         className={styles.blade}
@@ -47,6 +44,8 @@ const GrassBlade: React.FC<{ x: number; y: number; height: number; delay: number
           zIndex,
         } as React.CSSProperties}
       >
+        <div className={styles.segment1} />
+        <div className={styles.segment2} />
         {hasFlower && (
           <div 
             className={styles.flower}
@@ -58,42 +57,47 @@ const GrassBlade: React.FC<{ x: number; y: number; height: number; delay: number
         )}
       </div>
     );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.x === nextProps.x &&
+      prevProps.y === nextProps.y &&
+      prevProps.height === nextProps.height &&
+      prevProps.delay === nextProps.delay &&
+      prevProps.seed === nextProps.seed
+    );
   }
 );
 
 GrassBlade.displayName = 'GrassBlade';
 
-export const Grass: React.FC<GrassProps> = React.memo(({ timestamp, count = 100 }) => {
+export const Grass: React.FC<GrassProps> = React.memo(({ timestamp, count = 1000 }) => {
   const blades = React.useMemo(() => {
     return Array.from({ length: count }, (_, i) => {
       const seed = timestamp + i;
-      const y = 4 + seededRandom(seed + 1) * 21; // between 4% and 25% from bottom
-      // Scale height based on vertical position - taller at bottom, shorter at top
-      const baseHeight = 15 + seededRandom(seed + 2) * 15; // base height between 15-30px
-      const heightScale = 1 - ((y - 4) / 21); // 1 at bottom (4%), 0 at top (25%)
-      const height = baseHeight * (0.2 + heightScale * 0.8); // scale between 20% and 100% of base height
+      const y =  seededRandom(seed + 1) * 25;
+      const baseHeight = 15 + seededRandom(seed + 2) * 15;
+      const heightScale = 1 - ((y) / 25);
+      const height = baseHeight * (0.2 + heightScale * 0.8);
       
       return {
         key: `blade-${i}`,
         x: seededRandom(seed) * 100,
         y,
         height,
-        delay: seededRandom(seed + 3) * 2, // random delay between 0-2s
+        delay: seededRandom(seed + 3) * 2,
         seed,
       };
     });
   }, [timestamp, count]);
 
+  // console.log('blades length', blades.length);
   return (
     <>
       {blades.map(blade => (
         <GrassBlade
+          {...blade}
           key={blade.key}
-          x={blade.x}
-          y={blade.y}
-          height={blade.height}
-          delay={blade.delay}
-          seed={blade.seed}
         />
       ))}
     </>
