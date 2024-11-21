@@ -1,11 +1,17 @@
+'use client';
+
 import React from 'react';
 import styles from './styles.module.css';
+import { useZoom } from '@/app/context/ZoomContext';
 
 interface RandomMountainsProps {
   timestamp?: number; // Optional timestamp for randomization seed
 }
 
 const RandomMountains: React.FC<RandomMountainsProps> = ({ timestamp = Date.now() }) => {
+  const { scale } = useZoom();
+  const mountainScale = 1 + (scale - 1) * 0.2; // Scale at 20% of the normal rate
+
   // Generate a seeded random number between min and max
   const seededRandom = (min: number, max: number, seed: number) => {
     const x = Math.sin(seed++) * 10000;
@@ -38,6 +44,8 @@ const RandomMountains: React.FC<RandomMountainsProps> = ({ timestamp = Date.now(
       className={styles.randomMountains}
       style={{
         clipPath: `polygon(${mountainPoints})`,
+        transform: `scale(${mountainScale})`,
+        transformOrigin: 'bottom center'
       }}
     />
   );
