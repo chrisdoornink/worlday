@@ -6,9 +6,9 @@
   height: 15vh;
   background: repeating-linear-gradient(
     45deg,
-    rgba(44, 83, 100, 0.5) 0%,
-    rgba(32, 58, 67, 0.5) 10%,
-    rgba(15, 32, 39, 0.5) 20%
+    rgba(44, 83, 100, 1) 0%,
+    rgba(32, 58, 67, 1) 10%,
+    rgba(15, 32, 39, 1) 20%
   );
   transition: all 3s ease;
   z-index: 1;

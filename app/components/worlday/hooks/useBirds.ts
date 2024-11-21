@@ -40,7 +40,7 @@ export const useBirds = (weather: Weather) => {
     const baseTop = 5 + Math.random() * 15; // Base position for the group
     const verticalOffset = (groupSpread / totalInGroup) * groupPosition; // Distribute birds vertically
     const horizontalOffset = Math.random() * 10; // Slight horizontal variation within group
-    const floatRange = 5 + Math.random() * 10; // 5-15px float range
+    const floatRange = 2 + Math.random() * 4; // 2-6px float range
     const floatDuration = 2 + Math.random() * 2; // 2-4 second float cycle
     
     console.log('Generating bird with wind:', wind);
