@@ -55,7 +55,9 @@
   transform: translateX(0);
   will-change: transform;
   animation-play-state: running;
-  filter: blur(8px);
+  filter: blur(calc(8px * var(--cloud-scale, 1)));
+  width: calc(100px * var(--cloud-scale, 1));
+  height: calc(100px * var(--cloud-scale, 1));
 }
 
 .dayCloud {
@@ -139,79 +141,78 @@
 /* Cloud shapes using box-shadows */
 .cloud1 {
   /* Wide, spread out cloud */
-  width: 140px;
-  height: 100px;
+  width: calc(140px * var(--cloud-scale, 1));
+  height: calc(100px * var(--cloud-scale, 1));
   border-radius: 50%;
   box-shadow: 
-    120px -20px 0 -15px white,
-    240px 0px 0 -25px white,
-    180px 20px 0 -20px white,
-    60px -40px 0 -15px white,
-    200px -30px 0 -25px white,
-    280px 10px 0 -30px white,
-    140px 30px 0 -20px white;
+    calc(120px * var(--cloud-scale, 1)) calc(-20px * var(--cloud-scale, 1)) 0 calc(-15px * var(--cloud-scale, 1)) white,
+    calc(240px * var(--cloud-scale, 1)) 0px 0 calc(-25px * var(--cloud-scale, 1)) white,
+    calc(180px * var(--cloud-scale, 1)) calc(20px * var(--cloud-scale, 1)) 0 calc(-20px * var(--cloud-scale, 1)) white,
+    calc(60px * var(--cloud-scale, 1)) calc(-40px * var(--cloud-scale, 1)) 0 calc(-15px * var(--cloud-scale, 1)) white,
+    calc(200px * var(--cloud-scale, 1)) calc(-30px * var(--cloud-scale, 1)) 0 calc(-25px * var(--cloud-scale, 1)) white,
+    calc(280px * var(--cloud-scale, 1)) calc(10px * var(--cloud-scale, 1)) 0 calc(-30px * var(--cloud-scale, 1)) white,
+    calc(140px * var(--cloud-scale, 1)) calc(30px * var(--cloud-scale, 1)) 0 calc(-20px * var(--cloud-scale, 1)) white;
 }
 
 .cloud1.nightCloud {
   box-shadow: 
-    120px -20px 0 -15px #2B4865,
-    240px 0px 0 -25px #2B4865,
-    180px 20px 0 -20px #2B4865,
-    60px -40px 0 -15px #2B4865,
-    200px -30px 0 -25px #2B4865,
-    280px 10px 0 -30px #2B4865,
-    140px 30px 0 -20px #2B4865;
+    calc(120px * var(--cloud-scale, 1)) calc(-20px * var(--cloud-scale, 1)) 0 calc(-15px * var(--cloud-scale, 1)) #2B4865,
+    calc(240px * var(--cloud-scale, 1)) 0px 0 calc(-25px * var(--cloud-scale, 1)) #2B4865,
+    calc(180px * var(--cloud-scale, 1)) calc(20px * var(--cloud-scale, 1)) 0 calc(-20px * var(--cloud-scale, 1)) #2B4865,
+    calc(60px * var(--cloud-scale, 1)) calc(-40px * var(--cloud-scale, 1)) 0 calc(-15px * var(--cloud-scale, 1)) #2B4865,
+    calc(200px * var(--cloud-scale, 1)) calc(-30px * var(--cloud-scale, 1)) 0 calc(-25px * var(--cloud-scale, 1)) #2B4865,
+    calc(280px * var(--cloud-scale, 1)) calc(10px * var(--cloud-scale, 1)) 0 calc(-30px * var(--cloud-scale, 1)) #2B4865,
+    calc(140px * var(--cloud-scale, 1)) calc(30px * var(--cloud-scale, 1)) 0 calc(-20px * var(--cloud-scale, 1)) #2B4865;
 }
 
 .cloud2 {
   /* Taller, more compact cloud */
-  width: 120px;
-  height: 140px;
+  width: calc(120px * var(--cloud-scale, 1));
+  height: calc(140px * var(--cloud-scale, 1));
   border-radius: 50%;
   box-shadow: 
-    60px -40px 0 -15px white,
-    120px -60px 0 -25px white,
-    80px 20px 0 -20px white,
-    40px -80px 0 -15px white,
-    100px -20px 0 -25px white,
-    140px 0px 0 -20px white,
-    90px 40px 0 -15px white;
+    calc(60px * var(--cloud-scale, 1)) calc(-40px * var(--cloud-scale, 1)) 0 calc(-15px * var(--cloud-scale, 1)) white,
+    calc(120px * var(--cloud-scale, 1)) calc(-60px * var(--cloud-scale, 1)) 0 calc(-25px * var(--cloud-scale, 1)) white,
+    calc(80px * var(--cloud-scale, 1)) calc(20px * var(--cloud-scale, 1)) 0 calc(-20px * var(--cloud-scale, 1)) white,
+    calc(40px * var(--cloud-scale, 1)) calc(-80px * var(--cloud-scale, 1)) 0 calc(-15px * var(--cloud-scale, 1)) white,
+    calc(100px * var(--cloud-scale, 1)) calc(-20px * var(--cloud-scale, 1)) 0 calc(-25px * var(--cloud-scale, 1)) white,
+    calc(140px * var(--cloud-scale, 1)) 0px 0 calc(-20px * var(--cloud-scale, 1)) white,
+    calc(90px * var(--cloud-scale, 1)) calc(40px * var(--cloud-scale, 1)) 0 calc(-15px * var(--cloud-scale, 1)) white;
 }
 
 .cloud2.nightCloud {
   box-shadow: 
-    60px -40px 0 -15px #2B4865,
-    120px -60px 0 -25px #2B4865,
-    80px 20px 0 -20px #2B4865,
-    40px -80px 0 -15px #2B4865,
-    100px -20px 0 -25px #2B4865,
-    140px 0px 0 -20px #2B4865,
-    90px 40px 0 -15px #2B4865;
+    calc(60px * var(--cloud-scale, 1)) calc(-40px * var(--cloud-scale, 1)) 0 calc(-15px * var(--cloud-scale, 1)) #2B4865,
+    calc(120px * var(--cloud-scale, 1)) calc(-60px * var(--cloud-scale, 1)) 0 calc(-25px * var(--cloud-scale, 1)) #2B4865,
+    calc(80px * var(--cloud-scale, 1)) calc(20px * var(--cloud-scale, 1)) 0 calc(-20px * var(--cloud-scale, 1)) #2B4865,
+    calc(40px * var(--cloud-scale, 1)) calc(-80px * var(--cloud-scale, 1)) 0 calc(-15px * var(--cloud-scale, 1)) #2B4865,
+    calc(100px * var(--cloud-scale, 1)) calc(-20px * var(--cloud-scale, 1)) 0 calc(-25px * var(--cloud-scale, 1)) #2B4865,
+    calc(140px * var(--cloud-scale, 1)) 0px 0 calc(-20px * var(--cloud-scale, 1)) #2B4865,
+    calc(90px * var(--cloud-scale, 1)) calc(40px * var(--cloud-scale, 1)) 0 calc(-15px * var(--cloud-scale, 1)) #2B4865;
 }
 
 .cloud3 {
   /* Large, round cloud */
-  width: 180px;
-  height: 180px;
+  width: calc(180px * var(--cloud-scale, 1));
+  height: calc(180px * var(--cloud-scale, 1));
   border-radius: 50%;
   box-shadow: 
-    100px -50px 0 -35px white,
-    200px 0px 0 -45px white,
-    150px 50px 0 -35px white,
-    80px -80px 0 -30px white,
-    220px -70px 0 -40px white,
-    180px 30px 0 -50px white,
-    120px 60px 0 -35px white;
+    calc(100px * var(--cloud-scale, 1)) calc(-50px * var(--cloud-scale, 1)) 0 calc(-35px * var(--cloud-scale, 1)) white,
+    calc(200px * var(--cloud-scale, 1)) 0px 0 calc(-45px * var(--cloud-scale, 1)) white,
+    calc(150px * var(--cloud-scale, 1)) calc(50px * var(--cloud-scale, 1)) 0 calc(-35px * var(--cloud-scale, 1)) white,
+    calc(80px * var(--cloud-scale, 1)) calc(-80px * var(--cloud-scale, 1)) 0 calc(-30px * var(--cloud-scale, 1)) white,
+    calc(220px * var(--cloud-scale, 1)) calc(-70px * var(--cloud-scale, 1)) 0 calc(-40px * var(--cloud-scale, 1)) white,
+    calc(180px * var(--cloud-scale, 1)) calc(30px * var(--cloud-scale, 1)) 0 calc(-50px * var(--cloud-scale, 1)) white,
+    calc(120px * var(--cloud-scale, 1)) calc(60px * var(--cloud-scale, 1)) 0 calc(-35px * var(--cloud-scale, 1)) white;
 }
 
 .cloud3.nightCloud {
   box-shadow: 
-    100px -50px 0 -35px #2B4865,
-    200px 0px 0 -45px #2B4865,
-    150px 50px 0 -35px #2B4865,
-    80px -80px 0 -30px #2B4865,
-    220px -70px 0 -40px #2B4865,
-    180px 30px 0 -50px #2B4865,
-    120px 60px 0 -35px #2B4865;
+    calc(100px * var(--cloud-scale, 1)) calc(-50px * var(--cloud-scale, 1)) 0 calc(-35px * var(--cloud-scale, 1)) #2B4865,
+    calc(200px * var(--cloud-scale, 1)) 0px 0 calc(-45px * var(--cloud-scale, 1)) #2B4865,
+    calc(150px * var(--cloud-scale, 1)) calc(50px * var(--cloud-scale, 1)) 0 calc(-35px * var(--cloud-scale, 1)) #2B4865,
+    calc(80px * var(--cloud-scale, 1)) calc(-80px * var(--cloud-scale, 1)) 0 calc(-30px * var(--cloud-scale, 1)) #2B4865,
+    calc(220px * var(--cloud-scale, 1)) calc(-70px * var(--cloud-scale, 1)) 0 calc(-40px * var(--cloud-scale, 1)) #2B4865,
+    calc(180px * var(--cloud-scale, 1)) calc(30px * var(--cloud-scale, 1)) 0 calc(-50px * var(--cloud-scale, 1)) #2B4865,
+    calc(120px * var(--cloud-scale, 1)) calc(60px * var(--cloud-scale, 1)) 0 calc(-35px * var(--cloud-scale, 1)) #2B4865;
 } 
-  

@@ -14,6 +14,7 @@ import RandomMountains from './components/mountains/RandomMountains';
 import { Grass } from './components/grass/Grass';
 import { Trees } from './components/tree/Tree';
 import { CelestialBody } from './components/celestial/CelestialBody';
+import { useZoom } from '@/app/context/ZoomContext';
 
 export default function World() {
   const {
@@ -28,6 +29,8 @@ export default function World() {
     celestialPosition,
     setCrickets,
   } = useBackground();
+
+  const { scale } = useZoom();
 
   const landscapeTimestamp = React.useMemo(() => Date.now(), []);
 
@@ -125,7 +128,10 @@ export default function World() {
               animationDuration: cloud.duration,
               top: cloud.top,
               animationDelay: cloud.delay,
-            }}
+              transform: `scale(${scale})`,
+              transformOrigin: 'center center',
+              '--cloud-scale': scale
+            } as React.CSSProperties}
           />
         ))}
 
