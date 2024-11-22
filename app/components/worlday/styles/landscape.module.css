@@ -4,7 +4,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 40vh;
+  height: 42vh;
   background: linear-gradient(
     to bottom,
     transparent 0%,
@@ -19,12 +19,19 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 25.1vh;
-  background: linear-gradient(
+  height: 26.55vh;
+  /* background: linear-gradient(
     to bottom,
     #2c5364 0%,
     #203a43 50%,
     #0f2027 100%
+  ); */
+  background: linear-gradient(
+    to bottom,
+    #162a33 0%,
+    #2f454f 18%,
+    #3c4d53 55%,
+    #0f20279c 100%
   );
   transition: all 3s ease;
 }
@@ -58,10 +65,10 @@
 
 .mountains {
   position: absolute;
-  bottom: 25vh;
+  bottom: 26.25vh;
   left: 0;
   width: 100%;
-  height: 15vh;
+  height: 15.75vh;
   background: 
     repeating-linear-gradient(
       45deg,
@@ -94,4 +101,254 @@
     100% 100%
   );
   transition: all 3s ease;
+}
+
+.cricketPath {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 26.25vh;
+  z-index: 1;
+  opacity: .5;
+  background-image: 
+    /* Larger rocks */
+    radial-gradient(
+      circle 2.8px at 8% 62%,
+      rgba(35, 20, 10, 0.95) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      circle 2.5px at 22% 56%,
+      rgba(40, 25, 15, 0.92) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      circle 4.5px at 45% 63%,
+      rgba(35, 20, 10, 0.95) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      circle 2.4px at 58% 54%,
+      rgba(40, 25, 15, 0.92) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      circle 4.5px at 72% 66%,
+      rgba(35, 20, 10, 0.95) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      circle 2.2px at 88% 52%,
+      rgba(35, 20, 10, 0.92) 0%,
+      transparent 60%
+    ),
+    /* Medium rocks */
+    radial-gradient(
+      circle 2.7px at 15% 58%,
+      rgba(45, 30, 20, 0.92) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      circle 2.2px at 30% 51%,
+      rgba(40, 25, 15, 0.9) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      circle 2.6px at 38% 57%,
+      rgba(45, 30, 20, 0.92) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      circle 3.2px at 52% 60%,
+      rgba(45, 30, 20, 0.93) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      circle 2.3px at 68% 53%,
+      rgba(40, 25, 15, 0.91) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      circle 4.2px at 75% 68%,
+      rgba(45, 30, 20, 0.95) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      circle 2.4px at 85% 55%,
+      rgba(45, 30, 20, 0.91) 0%,
+      transparent 55%
+    ),
+    /* Small gravel */
+    radial-gradient(
+      circle 2.7px at 5% 59%,
+      rgba(50, 35, 25, 0.92) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle 4px at 18% 67%,
+      rgba(45, 30, 20, 0.95) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle 2.3px at 35% 53%,
+      rgba(50, 35, 25, 0.91) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle 3.5px at 48% 64%,
+      rgba(45, 30, 20, 0.94) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle 2.5px at 55% 56%,
+      rgba(50, 35, 25, 0.92) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle 4.5px at 62% 69%,
+      rgba(50, 35, 25, 0.95) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle 2.2px at 78% 52%,
+      rgba(45, 30, 20, 0.9) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle 3.2px at 82% 61%,
+      rgba(45, 30, 20, 0.93) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle 2.7px at 92% 58%,
+      rgba(50, 35, 25, 0.92) 0%,
+      transparent 50%
+    );
+  background-size: 26.25px 100%;
+  background-repeat: repeat-x;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    /* Offset gravel pattern */
+    background-image:
+      /* Random scattered medium rocks */
+      radial-gradient(
+        circle 3.8px at 12% 46%,
+        rgba(40, 25, 15, 0.85) 0%,
+        transparent 60%
+      ),
+      radial-gradient(
+        circle 3.5px at 28% 43%,
+        rgba(45, 30, 20, 0.8) 0%,
+        transparent 55%
+      ),
+      radial-gradient(
+        circle 3.8px at 42% 48%,
+        rgba(40, 25, 15, 0.85) 0%,
+        transparent 60%
+      ),
+      radial-gradient(
+        circle 3.6px at 65% 45%,
+        rgba(45, 30, 20, 0.8) 0%,
+        transparent 55%
+      ),
+      radial-gradient(
+        circle 3.2px at 82% 47%,
+        rgba(40, 25, 15, 0.85) 0%,
+        transparent 60%
+      ),
+      /* Small gravel fill */
+      radial-gradient(
+        circle 2.2px at 8% 45%,
+        rgba(50, 35, 25, 0.75) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle 1.8px at 25% 47%,
+        rgba(45, 30, 20, 0.8) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle 2px at 45% 46%,
+        rgba(50, 35, 25, 0.75) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle 1.9px at 72% 48%,
+        rgba(45, 30, 20, 0.8) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle 2.1px at 88% 45%,
+        rgba(50, 35, 25, 0.75) 0%,
+        transparent 50%
+      );
+    background-size: 23.1px 100%;
+    background-repeat: repeat-x;
+    opacity: 1;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    /* Scattered rocks outside road */
+    background-image:
+      /* Upper scattered rocks */
+      radial-gradient(
+        circle 4.5px at 12% 80%,
+        rgba(40, 25, 15, 0.6) 0%,
+        transparent 65%
+      ),
+      radial-gradient(
+        circle 3.5px at 35% 87%,
+        rgba(45, 30, 20, 0.5) 0%,
+        transparent 65%
+      ),
+      radial-gradient(
+        circle 4px at 58% 83%,
+        rgba(40, 25, 15, 0.55) 0%,
+        transparent 65%
+      ),
+      radial-gradient(
+        circle 3px at 82% 90%,
+        rgba(45, 30, 20, 0.5) 0%,
+        transparent 65%
+      ),
+      /* Lower scattered rocks */
+      radial-gradient(
+        circle 4px at 25% 20%,
+        rgba(40, 25, 15, 0.65) 0%,
+        transparent 65%
+      ),
+      radial-gradient(
+        circle 3px at 48% 17%,
+        rgba(45, 30, 20, 0.6) 0%,
+        transparent 65%
+      ),
+      radial-gradient(
+        circle 3.8px at 72% 23%,
+        rgba(40, 25, 15, 0.65) 0%,
+        transparent 65%
+      ),
+      radial-gradient(
+        circle 3.2px at 92% 19%,
+        rgba(45, 30, 20, 0.6) 0%,
+        transparent 65%
+      );
+    background-size: 47.25px 100%;
+    background-repeat: repeat-x;
+    opacity: 1;
+  }
 }

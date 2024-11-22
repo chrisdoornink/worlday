@@ -151,6 +151,8 @@ export default function World() {
           ))}
 
         {/* Landscape */}
+        <div className={landscapeStyles.ground} />
+        <div className={landscapeStyles.cricketPath} />
         <div className={landscapeStyles.horizon} />
         <RandomMountains timestamp={landscapeTimestamp} />
         <Trees timestamp={landscapeTimestamp} count={20} />
