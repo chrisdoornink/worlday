@@ -2,8 +2,9 @@
 
 import React from 'react';
 import { useWind } from '../../context/WindContext';
-import { useDayNightCycle } from '../../hooks/useHorizonAwareCelestial';
 import { useZoom } from '@/app/context/ZoomContext';
+import { getScaledValue } from '@/app/constants/scaling';
+import { useDayNightCycle } from '../../hooks/useHorizonAwareCelestial';
 import styles from './tree.module.css';
 
 const seededRandom = (seed: number) => {
@@ -26,7 +27,7 @@ const TreeComponent: React.FC<TreeProps> = React.memo(
     const { scale } = useZoom();
     const { isNightTime } = useDayNightCycle();
     const baseScaleFactor = 0.3 + (1 - (y / 25)) * 0.7; // Trees get smaller in distance
-    const scaleFactor = baseScaleFactor * scale; // Apply zoom scaling
+    const scaleFactor = baseScaleFactor * getScaledValue(scale, 'TREES'); // Apply zoom scaling with our scaling constants
     const branchCount = 2 + Math.floor(seededRandom(seed + 1) * 8); // 2-9 branches
     const zIndex = Math.round(2000 - ((y - 4) / 21) * 1000);
 
@@ -54,7 +55,7 @@ const TreeComponent: React.FC<TreeProps> = React.memo(
         style={{
           left: `${x}%`,
           bottom: `${y}%`,
-          height: `${height * scale}px`,
+          height: `${height * scaleFactor}px`,
           zIndex,
           '--wind-intensity': wind.intensity,
           '--wind-direction': wind.direction,
