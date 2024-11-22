@@ -12,12 +12,12 @@ export const SCALING_FACTORS = {
     MAX: 1.8,    // At 500% zoom (20% of normal zoom)
   },
   CELESTIAL: {
-    MIN: 1,      // At 100% zoom
-    MAX: 5,      // At 500% zoom (100% of normal zoom)
+    MIN: 3,      // At 100% zoom
+    MAX: 4,      // At 500% zoom (100% of normal zoom)
   },
   CLOUDS: {
-    MIN: 1,      // At 100% zoom
-    MAX: 5,      // At 500% zoom (100% of normal zoom)
+    MIN: 2,      // At 100% zoom
+    MAX: 3,      // At 500% zoom (100% of normal zoom)
   },
   GRASS: {
     MIN: 1,      // At 100% zoom
