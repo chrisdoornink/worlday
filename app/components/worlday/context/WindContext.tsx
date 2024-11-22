@@ -46,7 +46,7 @@ export const WindProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     // Update wind more frequently but with smaller changes
-    const interval = setInterval(updateWind, 2000 + Math.random() * 2000);
+    const interval = setInterval(updateWind, 5000 + Math.random() * 5000);
 
     return () => clearInterval(interval);
   }, []); 
