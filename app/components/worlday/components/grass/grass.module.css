@@ -19,15 +19,14 @@
   height: calc(5px * var(--scale-factor, 1));
   background: var(--flower-color);
   border-radius: 50%;
-  filter: blur(calc(0.5px * var(--scale-factor, 1))) brightness(1.4) contrast(1.2);
+  filter: brightness(1.2) contrast(1.1);
   box-shadow: 
     0 0 calc(2px * var(--scale-factor, 1)) var(--flower-color),
     0 0 calc(4px * var(--scale-factor, 1)) color-mix(in srgb, var(--flower-color), transparent 30%),
-    0 0 calc(6px * var(--scale-factor, 1)) color-mix(in srgb, var(--flower-color), white 20%),
-    inset 0 0 calc(2px * var(--scale-factor, 1)) rgba(255, 255, 255, 0.8);
+    0 0 calc(6px * var(--scale-factor, 1)) color-mix(in srgb, var(--flower-color), transparent 50%);
   animation: flowerSway 3s ease-in-out infinite;
   animation-delay: calc(var(--random-delay, 0) * -1s);
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
 }
 
 /* Left grass clump */
