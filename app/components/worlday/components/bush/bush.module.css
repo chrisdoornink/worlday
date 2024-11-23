@@ -13,12 +13,15 @@
   height: calc(var(--frond-length) * 1%);
   width: 3px;
   background: linear-gradient(to top, 
-    #2d5a27,
-    #3a7a34 20%,
-    #4c9943 40%);
+    #9b8fa8,
+    #c4b7d7 20%,
+    #e2dcf3 60%,
+    #f5f2ff 90%);
   transform-origin: bottom center;
   transform: 
     translateX(-50%)
     rotate(calc(var(--frond-angle) * 1deg));
   clip-path: polygon(0% 100%, 50% 0%, 100% 100%);
+  box-shadow: 0 0 5px rgba(226, 220, 243, 0.3);
+  filter: brightness(1.1);
 }

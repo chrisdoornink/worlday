@@ -1,12 +1,17 @@
 import React from 'react';
 import styles from './bush.module.css';
 import { seededRandom } from '../../../../lib/seeded-random';
+import { useZoom } from '@/app/context/ZoomContext';
 
 interface BushProps {
   seed: number;
+  style?: React.CSSProperties;
+  positionScale: number;
 }
 
-const Bush: React.FC<BushProps> = React.memo(({ seed }) => {
+const Bush: React.FC<BushProps> = React.memo(({ seed, style, positionScale }) => {
+  const { scale } = useZoom();
+  
   // Generate fronds (10-17 per bush)
   const frondCount = 10 + Math.floor(seededRandom(seed) * 8);
   
@@ -22,8 +27,17 @@ const Bush: React.FC<BushProps> = React.memo(({ seed }) => {
     });
   }, [seed, frondCount]);
 
+  // Combine both scaling factors
+  const combinedScale = scale * positionScale;
+
   return (
-    <div className={styles.bush}>
+    <div 
+      className={styles.bush} 
+      style={{ 
+        ...style,
+        transform: `scale(${combinedScale})`
+      }}
+    >
       {fronds.map((frond, index) => (
         <div
           key={index}

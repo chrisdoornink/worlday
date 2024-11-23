@@ -16,7 +16,7 @@ const Bushes: React.FC<BushesProps> = React.memo(({ timestamp, count = 15 }) => 
       const bottom = seededRandom(seed + 1) * 25; // 0-25vh from bottom
       
       // Calculate scale based on vertical position (1.0 at bottom, 0.1 at 25vh)
-      const scale = 1 - (bottom / 25) * 0.9;
+      const positionScale = 1 - (bottom / 25) * 0.9;
       
       return {
         seed,
@@ -24,8 +24,8 @@ const Bushes: React.FC<BushesProps> = React.memo(({ timestamp, count = 15 }) => 
           position: 'absolute',
           left: `${left}%`,
           bottom: `${bottom}vh`,
-          transform: `scale(${scale})`,
-        } as React.CSSProperties
+        } as React.CSSProperties,
+        positionScale
       };
     });
   }, [timestamp, count]);
@@ -33,8 +33,12 @@ const Bushes: React.FC<BushesProps> = React.memo(({ timestamp, count = 15 }) => 
   return (
     <div className={styles.bushWrapper}>
       {bushes.map((bush, index) => (
-        <div key={index} style={bush.style}>
-          <Bush seed={bush.seed} />
+        <div key={index}>
+          <Bush 
+            seed={bush.seed} 
+            style={bush.style}
+            positionScale={bush.positionScale}
+          />
         </div>
       ))}
     </div>
