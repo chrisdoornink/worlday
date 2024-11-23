@@ -13,6 +13,7 @@ import { Cricket } from './components/cricket';
 import RandomMountains from './components/mountains/RandomMountains';
 import { Grass } from './components/grass/Grass';
 import { Trees } from './components/tree/Tree';
+import Bushes from './components/bush/Bushes';
 import { CelestialBody } from './components/celestial/CelestialBody';
 import { useZoom } from '@/app/context/ZoomContext';
 import { getScaledValue } from '@/app/constants/scaling';
@@ -156,6 +157,7 @@ export default function World() {
         <div className={landscapeStyles.horizon} />
         <RandomMountains timestamp={landscapeTimestamp} />
         <Trees timestamp={landscapeTimestamp} count={20} />
+        <Bushes timestamp={landscapeTimestamp} count={15} />
         <Grass timestamp={landscapeTimestamp} count={200} />
         <div className={`${landscapeStyles.ground} ${landscapeStyles[`ground${timeOfDay.charAt(0).toUpperCase() + timeOfDay.slice(1)}`]}`} />
 

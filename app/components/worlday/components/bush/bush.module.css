@@ -1,0 +1,24 @@
+.bush {
+  position: absolute;
+  width: 4px;
+  height: 40px; /* Increased base size since we're scaling down */
+  transform-origin: bottom center;
+  pointer-events: none;
+}
+
+.frond {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  height: calc(var(--frond-length) * 1%);
+  width: 3px;
+  background: linear-gradient(to top, 
+    #2d5a27,
+    #3a7a34 20%,
+    #4c9943 40%);
+  transform-origin: bottom center;
+  transform: 
+    translateX(-50%)
+    rotate(calc(var(--frond-angle) * 1deg));
+  clip-path: polygon(0% 100%, 50% 0%, 100% 100%);
+}

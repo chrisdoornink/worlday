@@ -5,6 +5,7 @@ import { useWind } from '../../context/WindContext';
 import { useZoom } from '@/app/context/ZoomContext';
 import { getScaledValue } from '@/app/constants/scaling';
 import styles from './grass.module.css';
+import { seededRandom } from '@/app/lib/seeded-random';
 
 // Array of flower colors
 const flowerColors = [
@@ -16,11 +17,6 @@ const flowerColors = [
   '#E6E6FA', // lavender
 ];
 
-// Helper function to generate seeded random numbers
-const seededRandom = (seed: number) => {
-  const x = Math.sin(seed++) * 10000;
-  return x - Math.floor(x);
-};
 
 interface GrassBladeProps {
   x: number;
