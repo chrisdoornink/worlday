@@ -1,9 +1,10 @@
 .bush {
-  position: absolute;
   width: 4px;
-  height: 40px; /* Increased base size since we're scaling down */
+  height: 40px;
   transform-origin: bottom center;
   pointer-events: none;
+  animation: bushSway 4s ease-in-out infinite;
+  animation-delay: var(--wind-delay, 0s);
 }
 
 .frond {
@@ -20,10 +21,21 @@
   transform-origin: bottom center;
   transform: 
     translateX(-50%)
-    rotate(calc(var(--frond-angle) * 1deg));
+    rotate(calc(var(--frond-angle) * 1deg + var(--wind-rotation, 0deg)));
   clip-path: polygon(0% 100%, 50% 0%, 100% 100%);
   box-shadow: 
     0 0 5px rgba(226, 220, 243, 0.3),
     inset 0 0 10px rgba(196, 183, 215, 0.2);
   filter: brightness(1.1) contrast(1.1);
+  transition: transform 0.3s ease-out;
+  will-change: transform;
+}
+
+@keyframes bushSway {
+  0%, 100% {
+    transform: rotate(calc(var(--wind-rotation, 0deg) - 2deg));
+  }
+  50% {
+    transform: rotate(calc(var(--wind-rotation, 0deg) + 2deg));
+  }
 }
