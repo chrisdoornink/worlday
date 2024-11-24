@@ -21,7 +21,7 @@ const Bushes: React.FC<BushesProps> = React.memo(({ timestamp, count = 15 }) => 
       // Calculate scale based on vertical position (1.0 at bottom, 0.1 at 25vh)
       const positionScale = 1 - (bottom / 25) * 0.9;
 
-      const zIndex = Math.round(2000 - ((bottom - 8) / 25) * 1000);
+      const zIndex = Math.round(2000 - ((bottom) / 30) * 1000);
       
       return {
         seed,
