@@ -1,0 +1,5 @@
+.character {
+  border-radius: 2px;
+  pointer-events: none;
+  will-change: transform;
+}

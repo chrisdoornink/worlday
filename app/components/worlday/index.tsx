@@ -17,6 +17,7 @@ import Bushes from './components/bush/Bushes';
 import { CelestialBody } from './components/celestial/CelestialBody';
 import { useZoom } from '@/app/context/ZoomContext';
 import { getScaledValue } from '@/app/constants/scaling';
+import CharacterContainer from './components/character/CharacterContainer';
 
 export default function World() {
   const {
@@ -150,6 +151,9 @@ export default function World() {
               }}
             />
           ))}
+
+        {/* Character */}
+        <CharacterContainer />
 
         {/* Landscape */}
         <div className={landscapeStyles.ground} />
