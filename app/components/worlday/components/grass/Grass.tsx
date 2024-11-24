@@ -6,6 +6,7 @@ import { useZoom } from '@/app/context/ZoomContext';
 import { getScaledValue } from '@/app/constants/scaling';
 import styles from './grass.module.css';
 import { seededRandom } from '@/app/lib/seeded-random';
+import { calculateZIndex } from '../../utils/zIndexCalculator';
 
 // Array of flower colors
 const flowerColors = [
@@ -16,7 +17,6 @@ const flowerColors = [
   '#F0E68C', // khaki
   '#E6E6FA', // lavender
 ];
-
 
 interface GrassBladeProps {
   x: number;
@@ -38,7 +38,7 @@ const GrassBlade: React.FC<GrassBladeProps> = React.memo(
     
     const hasFlower = seededRandom(seed + 100) < 0.1;
     const flowerColor = flowerColors[Math.floor(seededRandom(seed + 200) * flowerColors.length)];
-    const zIndex = Math.round(2000 - ((y - 4) / 21) * 1000);
+    const zIndex = calculateZIndex(y);
     const baseScaleFactor = 0.2 + (1 - ((y - 4) / 21)) * 0.8;
     const scaleFactor = baseScaleFactor * getScaledValue(scale, 'GRASS');
 
@@ -88,16 +88,23 @@ export const Grass: React.FC<GrassProps> = React.memo(({ timestamp, count = 200 
   const blades = React.useMemo(() => {
     return Array.from({ length: count }, (_, i) => {
       const seed = timestamp + i;
-      const y =  seededRandom(seed + 1) * 25;
-      const baseHeight = 15 + seededRandom(seed + 2) * 15;
-      const heightScale = 1 - ((y) / 25);
-      const height = baseHeight * (0.2 + heightScale * 0.8);
+      const ySeed = seed + 1;
+      const xSeed = seed;
+      const x = seededRandom(xSeed) * 100;
+      const y = seededRandom(ySeed) * 25;
       
+      const scale = 1 - (y / 25) * 0.9;
+      const windDelay = seededRandom(seed) * -4;
+      const windDuration = 2 + seededRandom(seed) * 2;
+      const windRotation = 2 + seededRandom(seed) * 3;
+
+      const zIndex = calculateZIndex(y);
+
       return {
         key: `blade-${i}`,
-        x: seededRandom(seed) * 100,
+        x,
         y,
-        height,
+        height: 15 + seededRandom(seed + 2) * 15,
         delay: seededRandom(seed + 3) * 2,
         seed,
       };

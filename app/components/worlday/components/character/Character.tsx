@@ -1,13 +1,16 @@
 import React from 'react';
 import styles from './character.module.css';
 import { CHARACTER_CONFIG } from './characterConfig';
+import { calculateZIndex } from '../../utils/zIndexCalculator';
 
 interface CharacterProps {
   position: number; // 0-100 representing percentage across screen
 }
 
 const Character: React.FC<CharacterProps> = ({ position }) => {
-  const zIndex = 1617; // this is correct for 12vh bottom position
+  // Extract vh value from CHARACTER_CONFIG.BOTTOM_POSITION
+  const bottomVh = parseFloat(CHARACTER_CONFIG.BOTTOM_POSITION);
+  const zIndex = calculateZIndex(bottomVh);
 
   return (
     <div 
