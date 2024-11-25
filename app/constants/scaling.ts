@@ -26,6 +26,10 @@ export const SCALING_FACTORS = {
   TREES: {
     MIN: 1,      // At 100% zoom
     MAX: 5,      // At 500% zoom (100% of normal zoom)
+  },
+  CHARACTER: {
+    MIN: 1,      // At 100% zoom
+    MAX: 5,      // At 500% zoom (100% of normal zoom)
   }
 } as const;
 
