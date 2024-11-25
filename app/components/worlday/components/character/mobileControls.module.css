@@ -1,0 +1,47 @@
+.controlButton {
+  position: fixed;
+  bottom: 28vh;
+  width: 60px;
+  height: 80px;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  z-index: 9999;
+}
+
+.controlButton:active {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.leftButton {
+  composes: controlButton;
+  left: 20px;
+}
+
+.rightButton {
+  composes: controlButton;
+  right: 20px;
+}
+
+.arrow {
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+}
+
+.leftArrow {
+  composes: arrow;
+  border-right: 20px solid rgba(255, 255, 255, 0.8);
+}
+
+.rightArrow {
+  composes: arrow;
+  border-left: 20px solid rgba(255, 255, 255, 0.8);
+}
