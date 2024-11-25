@@ -12,18 +12,18 @@
 /* Flower styles */
 .flower {
   position: absolute;
-  top: calc(-4px * var(--scale-factor, 1));
+  top: calc(-4px * var(--scale-factor, 1) * var(--distance-scale, 1));
   left: 50%;
   transform: translateX(-50%);
-  width: calc(5px * var(--scale-factor, 1));
-  height: calc(5px * var(--scale-factor, 1));
+  width: calc(5px * var(--scale-factor, 1) * var(--distance-scale, 1));
+  height: calc(5px * var(--scale-factor, 1) * var(--distance-scale, 1));
   background: var(--flower-color);
   border-radius: 50%;
   filter: brightness(1.2) contrast(1.1);
   box-shadow: 
-    0 0 calc(2px * var(--scale-factor, 1)) var(--flower-color),
-    0 0 calc(4px * var(--scale-factor, 1)) color-mix(in srgb, var(--flower-color), transparent 30%),
-    0 0 calc(6px * var(--scale-factor, 1)) color-mix(in srgb, var(--flower-color), transparent 50%);
+    0 0 calc(2px * var(--scale-factor, 1) * var(--distance-scale, 1)) var(--flower-color),
+    0 0 calc(4px * var(--scale-factor, 1) * var(--distance-scale, 1)) color-mix(in srgb, var(--flower-color), transparent 30%),
+    0 0 calc(6px * var(--scale-factor, 1) * var(--distance-scale, 1)) color-mix(in srgb, var(--flower-color), transparent 50%);
   animation: flowerSway 3s ease-in-out infinite;
   animation-delay: calc(var(--random-delay, 0) * -1s);
   mix-blend-mode: normal;
