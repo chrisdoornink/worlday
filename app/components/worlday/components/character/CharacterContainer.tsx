@@ -5,7 +5,7 @@ import { CHARACTER_CONFIG } from './characterConfig';
 import { useIsMobile } from '@/app/hooks/useIsMobile';
 
 const CharacterContainer: React.FC = () => {
-  const [position, setPosition] = useState(50); // Start in middle of screen
+  const [position, setPosition] = useState(0); // Start at left edge
   const isMobile = useIsMobile();
 
   const moveLeft = useCallback(() => {
@@ -13,7 +13,15 @@ const CharacterContainer: React.FC = () => {
   }, []);
 
   const moveRight = useCallback(() => {
-    setPosition(prev => Math.min(100, prev + CHARACTER_CONFIG.MOVEMENT_SPEED));
+    setPosition(prev => {
+      const newPosition = prev + CHARACTER_CONFIG.MOVEMENT_SPEED;
+      if (newPosition >= 100) {
+        // Refresh the page when reaching the right edge
+        window.location.reload();
+        return 100;
+      }
+      return newPosition;
+    });
   }, []);
 
   useEffect(() => {
