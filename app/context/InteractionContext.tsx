@@ -12,6 +12,7 @@ interface InteractionContextType {
   registerObject: (object: InteractiveObject) => void;
   unregisterObject: (id: string) => void;
   getObjectsInRange: (position: number, range: number) => InteractiveObject[];
+  updatePosition: (id: string, newPosition: { x: number; y: number }) => void;
 }
 
 const InteractionContext = createContext<InteractionContextType | null>(null);
@@ -42,8 +43,20 @@ export const InteractionProvider: React.FC<{ children: React.ReactNode }> = ({ c
     });
   }, [objects]);
 
+  const updatePosition = useCallback((id: string, newPosition: { x: number; y: number }) => {
+    setObjects(prev => {
+      const next = new Map(prev);
+      const obj = next.get(id);
+      if (obj) {
+        obj.position = newPosition; // Mutate the existing object instead of creating a new one
+        next.set(id, obj);
+      }
+      return next;
+    });
+  }, []);
+
   return (
-    <InteractionContext.Provider value={{ registerObject, unregisterObject, getObjectsInRange }}>
+    <InteractionContext.Provider value={{ registerObject, unregisterObject, getObjectsInRange, updatePosition }}>
       {children}
     </InteractionContext.Provider>
   );

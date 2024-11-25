@@ -26,7 +26,7 @@ const Cricket: React.FC<CricketProps> = React.memo(({ id, position: initialPosit
     startTime: number;
     animationFrame: number | null;
   }>({ startTime: 0, animationFrame: null });
-  const { registerObject, unregisterObject } = useInteraction();
+  const { registerObject, unregisterObject, updatePosition } = useInteraction();
 
   const flyAway = useCallback(() => {
     console.log('flying away');
@@ -129,7 +129,6 @@ const Cricket: React.FC<CricketProps> = React.memo(({ id, position: initialPosit
 
   useEffect(() => {
     // Register cricket with interaction system
-    console.log('registering cricket');
     registerObject({
       id,
       type: 'cricket',
@@ -141,7 +140,12 @@ const Cricket: React.FC<CricketProps> = React.memo(({ id, position: initialPosit
     return () => {
       unregisterObject(id);
     };
-  }, [id, position, registerObject, unregisterObject, flyAway]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, registerObject, unregisterObject, flyAway]);
+
+  useEffect(() => {
+    updatePosition(id, position);
+  }, [id, position, updatePosition]);
 
   return (
     <div
