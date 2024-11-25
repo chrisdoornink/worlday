@@ -2,14 +2,16 @@
 
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import styles from './styles.module.css';
+import { useInteraction } from '@/app/context/InteractionContext';
 
 interface CricketProps {
+  id: string;
   position?: { x: number; y: number };
   style?: React.CSSProperties;
   onRemove?: () => void;
 }
 
-const Cricket: React.FC<CricketProps> = React.memo(({ position: initialPosition, style, onRemove }) => {
+const Cricket: React.FC<CricketProps> = React.memo(({ id, position: initialPosition, style, onRemove }) => {
   const [position, setPosition] = useState(initialPosition || { 
     x: Math.random() * 100, 
     y: 8 + Math.random() * 6
@@ -24,8 +26,10 @@ const Cricket: React.FC<CricketProps> = React.memo(({ position: initialPosition,
     startTime: number;
     animationFrame: number | null;
   }>({ startTime: 0, animationFrame: null });
+  const { registerObject, unregisterObject } = useInteraction();
 
   const flyAway = useCallback(() => {
+    console.log('flying away');
     if (isFlyingAway) return;
     setIsFlyingAway(true);
     flyAwayRef.current.startTime = Date.now();
@@ -122,6 +126,22 @@ const Cricket: React.FC<CricketProps> = React.memo(({ position: initialPosition,
 
     return () => clearInterval(hopInterval);
   }, [isFlyingAway, isHopping]);
+
+  useEffect(() => {
+    // Register cricket with interaction system
+    console.log('registering cricket');
+    registerObject({
+      id,
+      type: 'cricket',
+      position,
+      ref: cricketRef,
+      onInteract: flyAway
+    });
+
+    return () => {
+      unregisterObject(id);
+    };
+  }, [id, position, registerObject, unregisterObject, flyAway]);
 
   return (
     <div

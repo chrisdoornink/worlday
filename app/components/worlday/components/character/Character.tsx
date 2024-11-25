@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styles from './character.module.css';
 import { CHARACTER_CONFIG } from './characterConfig';
 import { calculateZIndex } from '../../utils/zIndexCalculator';
 import { useZoom } from '@/app/context/ZoomContext';
 import { getScaledValue } from '@/app/constants/scaling';
+import { useInteraction } from '@/app/context/InteractionContext';
 
 interface CharacterProps {
   position: number; // 0-100 representing percentage across screen
@@ -11,6 +12,8 @@ interface CharacterProps {
 
 const Character: React.FC<CharacterProps> = ({ position }) => {
   const { scale } = useZoom();
+  const { getObjectsInRange } = useInteraction();
+  const lastCheckRef = useRef(0);
   
   // Extract vh value from CHARACTER_CONFIG.BOTTOM_POSITION
   const bottomVh = parseFloat(CHARACTER_CONFIG.BOTTOM_POSITION);
@@ -18,6 +21,22 @@ const Character: React.FC<CharacterProps> = ({ position }) => {
 
   // Calculate scale factor based on zoom level
   const scaleFactor = getScaledValue(scale, 'CHARACTER');
+
+  // Check for nearby objects (throttled to every 300ms)
+  useEffect(() => {
+    const now = Date.now();
+    if (now - lastCheckRef.current < 300) return;
+    lastCheckRef.current = now;
+
+    const range = 10; // Interaction range in percentage of screen width
+    const nearbyObjects = getObjectsInRange(position, range);
+    
+    nearbyObjects.forEach(obj => {
+      if (obj.type === 'cricket') {
+        obj.onInteract();
+      }
+    });
+  }, [position, getObjectsInRange]);
 
   return (
     <div 

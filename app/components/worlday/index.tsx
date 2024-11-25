@@ -18,8 +18,10 @@ import { CelestialBody } from './components/celestial/CelestialBody';
 import { useZoom } from '@/app/context/ZoomContext';
 import { getScaledValue } from '@/app/constants/scaling';
 import CharacterContainer from './components/character/CharacterContainer';
+import { WindProvider } from './context/WindContext';
+import { InteractionProvider } from '@/app/context/InteractionContext';
 
-export default function World() {
+const World = () => {
   const {
     clouds,
     crickets,
@@ -38,143 +40,149 @@ export default function World() {
   const landscapeTimestamp = React.useMemo(() => Date.now(), []);
 
   return (
-    
-      <div className={`${worldStyles.worldContainer} ${worldStyles[timeOfDay]}`}>
-        {/* Background cloud for rain and snow */}
-        {(weather === 'rain' || weather === 'snow') && (
-          <div className={`${weatherStyles.backgroundCloud} ${weather === 'snow' ? weatherStyles.snowCloud : ''}`} />
-        )}
-        
-        {/* Celestial body (sun or moon) */}
-        <CelestialBody
-          isNightTime={isNightTime}
-          position={celestialPosition}
-          weather={weather}
-        />
+    <WindProvider>
+      <InteractionProvider>
+        <div className={`${worldStyles.worldContainer} ${worldStyles[timeOfDay]}`}>
+          {/* Background cloud for rain and snow */}
+          {(weather === 'rain' || weather === 'snow') && (
+            <div className={`${weatherStyles.backgroundCloud} ${weather === 'snow' ? weatherStyles.snowCloud : ''}`} />
+          )}
+          
+          {/* Celestial body (sun or moon) */}
+          <CelestialBody
+            isNightTime={isNightTime}
+            position={celestialPosition}
+            weather={weather}
+          />
 
-        {/* Crows - only show in clear weather */}
-        {weather === 'clear' && (
-          <>
-            <Crow 
-              style={{ 
-                left: '45%',
-                animationDelay: '0s',
-                animationDuration: '20s'
-              }}
-              flapDelay={0}
-            />
-            <Crow 
-              style={{ 
-                left: '55%',
-                top: '28%',
-                animationDelay: '-2s',
-                animationDuration: '22s'
-              }}
-              flapDelay={0.2}
-            />
-            <Crow 
-              style={{ 
-                left: '48%',
-                top: '32%',
-                animationDelay: '-4s',
-                animationDuration: '21s'
-              }}
-              flapDelay={0.1}
-            />
-          </>
-        )}
-
-        {/* Birds */}
-        {birds.map((bird) => (
-          <div
-            key={bird.key}
-            className={birdStyles.birdWrapper}
-            style={bird.style}
-          >
-            <div 
-              className={birdStyles.floatWrapper}
-              style={bird.floatStyle}
-            >
-              <div
-                className={`${birdStyles.bird} ${isNightTime ? birdStyles.nightBird : ''}`}
-                style={bird.flapStyle}
+          {/* Crows - only show in clear weather */}
+          {weather === 'clear' && (
+            <>
+              <Crow 
+                style={{ 
+                  left: '45%',
+                  animationDelay: '0s',
+                  animationDuration: '20s'
+                }}
+                flapDelay={0}
               />
+              <Crow 
+                style={{ 
+                  left: '55%',
+                  top: '28%',
+                  animationDelay: '-2s',
+                  animationDuration: '22s'
+                }}
+                flapDelay={0.2}
+              />
+              <Crow 
+                style={{ 
+                  left: '48%',
+                  top: '32%',
+                  animationDelay: '-4s',
+                  animationDuration: '21s'
+                }}
+                flapDelay={0.1}
+              />
+            </>
+          )}
+
+          {/* Birds */}
+          {birds.map((bird) => (
+            <div
+              key={bird.key}
+              className={birdStyles.birdWrapper}
+              style={bird.style}
+            >
+              <div 
+                className={birdStyles.floatWrapper}
+                style={bird.floatStyle}
+              >
+                <div
+                  className={`${birdStyles.bird} ${isNightTime ? birdStyles.nightBird : ''}`}
+                  style={bird.flapStyle}
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
 
-        {/* Stars */}
-        {isNightTime &&
-          stars.map(star => (
+          {/* Stars */}
+          {isNightTime &&
+            stars.map(star => (
+              <div
+                key={star.key}
+                className={`${starStyles.star} ${star.bright ? starStyles.starBright : ''}`}
+                style={{
+                  top: star.top,
+                  left: star.left,
+                  animationDelay: star.delay,
+                }}
+              />
+            ))}
+
+          {/* Clouds */}
+          {clouds.map(cloud => (
             <div
-              key={star.key}
-              className={`${starStyles.star} ${star.bright ? starStyles.starBright : ''}`}
-              style={{
-                top: star.top,
-                left: star.left,
-                animationDelay: star.delay,
-              }}
+              key={cloud.key}
+              className={`${weatherStyles.cloud} ${weatherStyles[cloud.type]} ${
+                isNightTime ? weatherStyles.nightCloud : weatherStyles.dayCloud
+              } ${weather === 'rain' ? weatherStyles.rainCloud : ''} ${
+                weather === 'snow' ? weatherStyles.snowCloud : ''
+              }`}
+              style={{ 
+                left: cloud.left,
+                animationDuration: cloud.duration,
+                top: cloud.top,
+                animationDelay: cloud.delay,
+                transform: `scale(${getScaledValue(scale, 'CLOUDS')})`,
+                transformOrigin: 'center center',
+                '--cloud-scale': getScaledValue(scale, 'CLOUDS')
+              } as React.CSSProperties}
             />
           ))}
 
-        {/* Clouds */}
-        {clouds.map(cloud => (
-          <div
-            key={cloud.key}
-            className={`${weatherStyles.cloud} ${weatherStyles[cloud.type]} ${
-              isNightTime ? weatherStyles.nightCloud : weatherStyles.dayCloud
-            } ${weather === 'rain' ? weatherStyles.rainCloud : ''} ${
-              weather === 'snow' ? weatherStyles.snowCloud : ''
-            }`}
-            style={{ 
-              left: cloud.left,
-              animationDuration: cloud.duration,
-              top: cloud.top,
-              animationDelay: cloud.delay,
-              transform: `scale(${getScaledValue(scale, 'CLOUDS')})`,
-              transformOrigin: 'center center',
-              '--cloud-scale': getScaledValue(scale, 'CLOUDS')
-            } as React.CSSProperties}
-          />
-        ))}
+          {/* Weather effects */}
+          {weather !== 'clear' &&
+            weatherParticles.map(particle => (
+              <div
+                key={particle.key}
+                className={weatherStyles[weather]}
+                style={{
+                  left: particle.left,
+                  animationDuration: particle.animationDuration,
+                  animationDelay: particle.delay,
+                }}
+              />
+            ))}
 
-        {/* Weather effects */}
-        {weather !== 'clear' &&
-          weatherParticles.map(particle => (
-            <div
-              key={particle.key}
-              className={weatherStyles[weather]}
-              style={{
-                left: particle.left,
-                animationDuration: particle.animationDuration,
-                animationDelay: particle.delay,
+          {/* Character */}
+          <CharacterContainer />
+
+          {/* Landscape */}
+          <div className={landscapeStyles.ground} />
+          <div className={landscapeStyles.cricketPath} />
+          <div className={landscapeStyles.horizon} />
+          <RandomMountains timestamp={landscapeTimestamp} />
+          <Trees timestamp={landscapeTimestamp} count={20} />
+          <Bushes timestamp={landscapeTimestamp} count={15} />
+          <Grass timestamp={landscapeTimestamp} count={200} />
+          <div className={`${landscapeStyles.ground} ${landscapeStyles[`ground${timeOfDay.charAt(0).toUpperCase() + timeOfDay.slice(1)}`]}`} />
+
+          {/* Crickets */}
+          {crickets.map(cricket => (
+            <Cricket
+              key={cricket.key}
+              id={cricket.key}
+              position={{ x: cricket.x, y: cricket.y }}
+              onRemove={() => {
+                setCrickets(prev => prev.filter(c => c.key !== cricket.key));
               }}
             />
           ))}
-
-        {/* Character */}
-        <CharacterContainer />
-
-        {/* Landscape */}
-        <div className={landscapeStyles.ground} />
-        <div className={landscapeStyles.cricketPath} />
-        <div className={landscapeStyles.horizon} />
-        <RandomMountains timestamp={landscapeTimestamp} />
-        <Trees timestamp={landscapeTimestamp} count={20} />
-        <Bushes timestamp={landscapeTimestamp} count={15} />
-        <Grass timestamp={landscapeTimestamp} count={200} />
-        <div className={`${landscapeStyles.ground} ${landscapeStyles[`ground${timeOfDay.charAt(0).toUpperCase() + timeOfDay.slice(1)}`]}`} />
-
-        {/* Crickets */}
-        {crickets.map(cricket => (
-          <Cricket
-            key={cricket.key}
-            position={{ x: cricket.x, y: cricket.y }}
-            onRemove={() => {
-              setCrickets(prev => prev.filter(c => c.key !== cricket.key));
-            }}
-          />
-        ))}
-      </div>
+        </div>
+      </InteractionProvider>
+    </WindProvider>
   );
 };
+
+export default World;
