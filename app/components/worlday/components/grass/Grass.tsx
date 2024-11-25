@@ -39,8 +39,9 @@ const GrassBlade: React.FC<GrassBladeProps> = React.memo(
     const hasFlower = seededRandom(seed + 100) < 0.1;
     const flowerColor = flowerColors[Math.floor(seededRandom(seed + 200) * flowerColors.length)];
     const zIndex = calculateZIndex(y);
-    const baseScaleFactor = 0.2 + (1 - ((y - 4) / 21)) * 0.8;
-    const scaleFactor = baseScaleFactor * getScaledValue(scale, 'GRASS');
+    const distanceScale = 0.2 + (1 - ((y - 4) / 21)) * 0.8;
+    const finalHeight = height * distanceScale * getScaledValue(scale, 'GRASS');
+    const scaleFactor = getScaledValue(scale, 'GRASS');
 
     return (
       <div
@@ -48,11 +49,12 @@ const GrassBlade: React.FC<GrassBladeProps> = React.memo(
         style={{
           left: `${x}%`,
           bottom: `${y}%`,
-          height: `${height * getScaledValue(scale, 'GRASS')}px`,
+          height: `${finalHeight}px`,
           '--wind-intensity': wind.intensity,
           '--wind-direction': wind.direction,
           '--random-delay': delay,
           '--scale-factor': scaleFactor,
+          '--distance-scale': distanceScale,
           zIndex,
           transformOrigin: 'bottom center'
         } as React.CSSProperties}
