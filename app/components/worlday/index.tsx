@@ -20,6 +20,7 @@ import { getScaledValue } from '@/app/constants/scaling';
 import CharacterContainer from './components/character/CharacterContainer';
 import { WindProvider } from './context/WindContext';
 import { InteractionProvider } from '@/app/context/InteractionContext';
+import { ThemeToggle } from './components/theme/ThemeToggle';
 
 const World = () => {
   const {
@@ -36,6 +37,7 @@ const World = () => {
   } = useBackground();
 
   const { scale } = useZoom();
+  const [theme, setTheme] = React.useState<'grassy' | 'original'>('grassy');
 
   const landscapeTimestamp = React.useMemo(() => Date.now(), []);
 
@@ -155,18 +157,21 @@ const World = () => {
               />
             ))}
 
+          {/* Theme toggle */}
+          <ThemeToggle theme={theme} onThemeChange={setTheme} />
+
           {/* Character */}
           <CharacterContainer />
 
           {/* Landscape */}
-          <div className={landscapeStyles.ground} />
+          <div className={`${landscapeStyles.ground} ${landscapeStyles[`ground${theme === 'grassy' ? 'Grassy' : 'Original'}`]}`} />
           <div className={landscapeStyles.cricketPath} />
           <div className={landscapeStyles.horizon} />
           <RandomMountains timestamp={landscapeTimestamp} />
           <Trees timestamp={landscapeTimestamp} count={20} />
           <Bushes timestamp={landscapeTimestamp} count={15} />
           <Grass timestamp={landscapeTimestamp} count={200} />
-          <div className={`${landscapeStyles.ground} ${landscapeStyles[`ground${timeOfDay.charAt(0).toUpperCase() + timeOfDay.slice(1)}`]}`} />
+          <div className={`${landscapeStyles.ground} ${landscapeStyles[`ground${timeOfDay.charAt(0).toUpperCase() + timeOfDay.slice(1)}${theme === 'grassy' ? 'Grassy' : 'Original'}`]}`} />
 
           {/* Crickets */}
           {crickets.map(cricket => (

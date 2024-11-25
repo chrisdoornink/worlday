@@ -20,12 +20,20 @@
   left: 0;
   width: 100%;
   height: 26.55vh;
-  /* background: linear-gradient(
+  transition: all 3s ease;
+}
+
+.groundGrassy {
+  background: linear-gradient(
     to bottom,
-    #2c5364 0%,
-    #203a43 50%,
-    #0f2027 100%
-  ); */
+    #4a8c44 0%,    /* Lighter grass green */
+    #3d7a37 18%,   /* Match existing grass color */
+    #8B7355 55%,   /* Brown worn path */
+    #2d5a27 100%   /* Match existing grass color */
+  );
+}
+
+.groundOriginal {
   background: linear-gradient(
     to bottom,
     #162a33 0%,
@@ -33,10 +41,29 @@
     #3c4d53 55%,
     #0f20279c 100%
   );
-  transition: all 3s ease;
 }
 
 .groundDay {
+  background: linear-gradient(
+    to bottom,
+    #5fa158 0%,    /* Brighter grass in daylight */
+    #4a8c44 18%,   /* Lighter grass green */
+    #9c8164 55%,   /* Lighter brown path in daylight */
+    #3d7a37 100%   /* Match existing grass color */
+  );
+}
+
+.groundDayGrassy {
+  background: linear-gradient(
+    to bottom,
+    #5fa158 0%,    /* Brighter grass in daylight */
+    #4a8c44 18%,   /* Lighter grass green */
+    #9c8164 55%,   /* Lighter brown path in daylight */
+    #3d7a37 100%   /* Match existing grass color */
+  );
+}
+
+.groundDayOriginal {
   background: linear-gradient(
     to bottom,
     #56ab2f 0%,
@@ -48,6 +75,26 @@
 .groundDusk {
   background: linear-gradient(
     to bottom,
+    #4a6b46 0%,    /* Muted grass at dusk */
+    #3d5a37 18%,   /* Darker grass at dusk */
+    #6b5544 55%,   /* Darker brown path at dusk */
+    #2d4a27 100%   /* Darker grass at dusk */
+  );
+}
+
+.groundDuskGrassy {
+  background: linear-gradient(
+    to bottom,
+    #4a6b46 0%,    /* Muted grass at dusk */
+    #3d5a37 18%,   /* Darker grass at dusk */
+    #6b5544 55%,   /* Darker brown path at dusk */
+    #2d4a27 100%   /* Darker grass at dusk */
+  );
+}
+
+.groundDuskOriginal {
+  background: linear-gradient(
+    to bottom,
     #614385 0%,
     #516395 50%,
     #2c5364 100%
@@ -55,6 +102,26 @@
 }
 
 .groundNight {
+  background: linear-gradient(
+    to bottom,
+    #2d4a27 0%,    /* Dark grass at night */
+    #1f3d1c 18%,   /* Darker grass at night */
+    #4b3d2f 55%,   /* Dark brown path at night */
+    #162716 100%   /* Very dark grass */
+  );
+}
+
+.groundNightGrassy {
+  background: linear-gradient(
+    to bottom,
+    #2d4a27 0%,    /* Dark grass at night */
+    #1f3d1c 18%,   /* Darker grass at night */
+    #4b3d2f 55%,   /* Dark brown path at night */
+    #162716 100%   /* Very dark grass */
+  );
+}
+
+.groundNightOriginal {
   background: linear-gradient(
     to bottom,
     #0f2027 0%,

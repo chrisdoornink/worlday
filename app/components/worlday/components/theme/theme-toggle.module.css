@@ -1,0 +1,44 @@
+.themeToggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.themeButton {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.themeButton:hover {
+  transform: scale(1.1);
+}
+
+.themeButton.active {
+  box-shadow: 0 0 0 2px white, 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.grassyButton {
+  background: linear-gradient(
+    to bottom,
+    #4a8c44 0%,
+    #3d7a37 50%,
+    #2d5a27 100%
+  );
+}
+
+.originalButton {
+  background: linear-gradient(
+    to bottom,
+    #162a33 0%,
+    #2f454f 50%,
+    #0f20279c 100%
+  );
+}
