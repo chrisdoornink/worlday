@@ -28,7 +28,7 @@
     to bottom,
     #4a8c44 0%,    /* Lighter grass green */
     #3d7a37 18%,   /* Match existing grass color */
-    #8B7355 55%,   /* Brown worn path */
+    #6B634A 55%,   /* Darker brown-green path */
     #2d5a27 100%   /* Match existing grass color */
   );
 }
@@ -46,9 +46,9 @@
 .groundDay {
   background: linear-gradient(
     to bottom,
-    #5fa158 0%,    /* Brighter grass in daylight */
+    #4a8c44 0%,    /* Less bright grass in daylight */
     #4a8c44 18%,   /* Lighter grass green */
-    #9c8164 55%,   /* Lighter brown path in daylight */
+    #7C7354 55%,   /* Darker brown-green path in daylight */
     #3d7a37 100%   /* Match existing grass color */
   );
 }
@@ -58,7 +58,7 @@
     to bottom,
     #5fa158 0%,    /* Brighter grass in daylight */
     #4a8c44 18%,   /* Lighter grass green */
-    #9c8164 55%,   /* Lighter brown path in daylight */
+    #7C7354 55%,   /* Darker brown-green path in daylight */
     #3d7a37 100%   /* Match existing grass color */
   );
 }
@@ -77,7 +77,7 @@
     to bottom,
     #4a6b46 0%,    /* Muted grass at dusk */
     #3d5a37 18%,   /* Darker grass at dusk */
-    #6b5544 55%,   /* Darker brown path at dusk */
+    #5B5341 55%,   /* Darker brown-green path at dusk */
     #2d4a27 100%   /* Darker grass at dusk */
   );
 }
@@ -87,7 +87,7 @@
     to bottom,
     #4a6b46 0%,    /* Muted grass at dusk */
     #3d5a37 18%,   /* Darker grass at dusk */
-    #6b5544 55%,   /* Darker brown path at dusk */
+    #5B5341 55%,   /* Darker brown-green path at dusk */
     #2d4a27 100%   /* Darker grass at dusk */
   );
 }
@@ -106,7 +106,7 @@
     to bottom,
     #2d4a27 0%,    /* Dark grass at night */
     #1f3d1c 18%,   /* Darker grass at night */
-    #4b3d2f 55%,   /* Dark brown path at night */
+    #3B332A 55%,   /* Dark brown-green path at night */
     #162716 100%   /* Very dark grass */
   );
 }
@@ -116,7 +116,7 @@
     to bottom,
     #2d4a27 0%,    /* Dark grass at night */
     #1f3d1c 18%,   /* Darker grass at night */
-    #4b3d2f 55%,   /* Dark brown path at night */
+    #3B332A 55%,   /* Dark brown-green path at night */
     #162716 100%   /* Very dark grass */
   );
 }
@@ -136,13 +136,12 @@
   left: 0;
   width: 100%;
   height: 15.75vh;
-  background: 
-    repeating-linear-gradient(
-      45deg,
-      rgba(44, 83, 100, 1) 0%,
-      rgba(32, 58, 67, 1) 10%,
-      rgba(15, 32, 39, 1) 20%
-    );
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(44, 83, 100, 1) 0%,
+    rgba(32, 58, 67, 1) 10%,
+    rgba(15, 32, 39, 1) 20%
+  );
   clip-path: polygon(
     0% 100%,
     5% 80%,
@@ -168,6 +167,22 @@
     100% 100%
   );
   transition: all 3s ease;
+}
+
+.randomMountains {
+  position: absolute;
+  bottom: 25vh;
+  left: 0;
+  width: 100%;
+  height: 15vh;
+  background: repeating-linear-gradient(
+    45deg,
+    #5B7667 0%,    /* Lighter mountain green */
+    #445C4F 10%,   /* Mid-tone mountain green */
+    #2C3A31 20%    /* Deep mountain shadow */
+  );
+  transition: all 3s ease;
+  z-index: 1;
 }
 
 .cricketPath {
