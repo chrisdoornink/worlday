@@ -177,7 +177,7 @@ const World = () => {
           {crickets.map(cricket => (
             <Cricket
               key={cricket.key}
-              id={cricket.key}
+              id={cricket.key.toString()}
               position={{ x: cricket.x, y: cricket.y }}
               onRemove={() => {
                 setCrickets(prev => prev.filter(c => c.key !== cricket.key));
