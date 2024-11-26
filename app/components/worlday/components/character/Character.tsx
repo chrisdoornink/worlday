@@ -8,16 +8,12 @@ import { useInteraction } from '@/app/context/InteractionContext';
 
 interface CharacterProps {
   position: number; // 0-100 representing percentage across screen
-  isMoving: boolean;
-  direction: 'left' | 'right';
   colors?: CharacterColors;
   style?: CharacterStyle;
 }
 
 const Character: React.FC<CharacterProps> = ({
   position,
-  isMoving,
-  direction,
   colors = DEFAULT_COLORS,
   style = DEFAULT_STYLE,
 }) => {
@@ -39,6 +35,9 @@ const Character: React.FC<CharacterProps> = ({
     '--character-width': CHARACTER_CONFIG.WIDTH,
     '--character-height': CHARACTER_CONFIG.HEIGHT,
   } as React.CSSProperties;
+
+  const isMoving = false; // TODO - Add movement logic
+  const direction = 'left'; // TODO - Add direction logic
 
   // Check for nearby objects (throttled to every 300ms)
   useEffect(() => {
